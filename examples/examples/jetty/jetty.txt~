@@ -1,0 +1,444 @@
+joubert@ambel(172)~/professional/research/topic/7-horn-clause/validation$!bddsh
+bddshell -v -t -c org/mortbay/jetty/Main
+Classpath is .:/usr/lib/jvm/java-1.5.0-sun/jre/lib:/home/joubert/professional/research/topic/7-horn-clause/examples:/home/joubert/professional/research/topic/7-horn-clause/validation:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddbddb.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jdom.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/libreadline-java.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddshell.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jwutil-1.0.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/weka.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/joeq.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/javabdd-1.0b2.jar
+
+
+Discovering call graph first...
+Adding default static variables.
+Using variable ordering N_F_I_I2_M2_M_Z_V2xV1_T1_H2_T2_H1
+Start reordering
+Garbage collection #1: 2500009 nodes / 2499408 free / 0.162s / 0.162s total
+End reordering. Went from 601 to 601 nodes, gain = 0% (0.823 sec)
+Time spent initializing: 2.058
+Discovering call graph, iteration 1: 42 methods.
+warning: excluding UnknownTypeNode java.lang.Object* from hT: H1(160)
+warning: excluding UnknownTypeNode java.lang.Class* from hT: H1(161)
+Discovering call graph, iteration 2: 130 methods.
+Discovering call graph, iteration 3: 258 methods.
+Discovering call graph, iteration 4: 444 methods.
+Discovering call graph, iteration 5: 622 methods.
+Found thread creation in loop: 86  NEW                     T2 AbstractConnector$Acceptor,       org.mortbay.jetty.AbstractConnector$Acceptor
+Garbage collection #2: 2500009 nodes / 2245002 free / 0.947s / 1.109s total
+Discovering call graph, iteration 6: 818 methods.
+Discovering call graph, iteration 7: 1024 methods.
+Discovering call graph, iteration 8: 1253 methods.
+Garbage collection #3: 2500009 nodes / 2058120 free / 0.418s / 1.527s total
+Discovering call graph, iteration 9: 1476 methods.
+Discovering call graph, iteration 10: 1720 methods.
+Garbage collection #4: 2500009 nodes / 1902383 free / 0.329s / 1.856s total
+Discovering call graph, iteration 11: 2024 methods.
+Garbage collection #5: 2500009 nodes / 1764787 free / 0.316s / 2.172s total
+Discovering call graph, iteration 12: 2352 methods.
+Garbage collection #6: 2500009 nodes / 1653424 free / 0.349s / 2.521s total
+Garbage collection #7: 2500009 nodes / 1511324 free / 0.38s / 2.901s total
+Discovering call graph, iteration 13: 2754 methods.
+Garbage collection #8: 2500009 nodes / 1407922 free / 0.405s / 3.306s total
+Discovering call graph, iteration 14: 3161 methods.
+Garbage collection #9: 2500009 nodes / 1333702 free / 0.424s / 3.73s total
+Garbage collection #10: 2500009 nodes / 1218335 free / 0.511s / 4.241s total
+Discovering call graph, iteration 15: 3481 methods.
+Garbage collection #11: 2500009 nodes / 1141363 free / 0.474s / 4.715s total
+Garbage collection #12: 2500009 nodes / 1068061 free / 0.497s / 5.212s total
+Discovering call graph, iteration 16: 3819 methods.
+Garbage collection #13: 2500009 nodes / 961104 free / 0.511s / 5.723s total
+Garbage collection #14: 2500009 nodes / 898979 free / 0.534s / 6.257s total
+Discovering call graph, iteration 17: 4142 methods.
+Garbage collection #15: 2500009 nodes / 869544 free / 0.531s / 6.788s total
+Garbage collection #16: 2500009 nodes / 796827 free / 0.576s / 7.364s total
+Garbage collection #17: 2500009 nodes / 759035 free / 0.608s / 7.972s total
+Discovering call graph, iteration 18: 4421 methods.
+Garbage collection #18: 2500009 nodes / 715458 free / 0.602s / 8.574s total
+Garbage collection #19: 2500009 nodes / 652241 free / 0.604s / 9.178s total
+Garbage collection #20: 2500009 nodes / 613709 free / 0.731s / 9.909s total
+Discovering call graph, iteration 19: 4655 methods.
+Garbage collection #21: 2500009 nodes / 596261 free / 0.665s / 10.574s total
+Garbage collection #22: 2500009 nodes / 460962 free / 0.663s / 11.237s total
+Resizing node table from 2500009 to 7500013
+Discovering call graph, iteration 20: 4803 methods.
+Discovering call graph, iteration 21: 4933 methods.
+Discovering call graph, iteration 22: 5032 methods.
+Discovering call graph, iteration 23: 5124 methods.
+Garbage collection #23: 7500013 nodes / 5165633 free / 0.976s / 12.213s total
+Discovering call graph, iteration 24: 5209 methods.
+Discovering call graph, iteration 25: 5316 methods.
+Discovering call graph, iteration 26: 5431 methods.
+Discovering call graph, iteration 27: 5575 methods.
+Discovering call graph, iteration 28: 5673 methods.
+Garbage collection #24: 7500013 nodes / 4779775 free / 1.079s / 13.292s total
+Discovering call graph, iteration 29: 5752 methods.
+Discovering call graph, iteration 30: 5836 methods.
+Discovering call graph, iteration 31: 5903 methods.
+Garbage collection #25: 7500013 nodes / 4531661 free / 1.136s / 14.428s total
+Discovering call graph, iteration 32: 5960 methods.
+Discovering call graph, iteration 33: 5989 methods.
+Discovering call graph, iteration 34: 6033 methods.
+Discovering call graph, iteration 35: 6065 methods.
+Discovering call graph, iteration 36: 6097 methods.
+Garbage collection #26: 7500013 nodes / 4215041 free / 1.21s / 15.638s total
+Discovering call graph, iteration 37: 6123 methods.
+Discovering call graph, iteration 38: 6138 methods.
+Discovering call graph, iteration 39: 6147 methods.
+Discovering call graph, iteration 40: 6155 methods.
+Discovering call graph, iteration 41: 6159 methods.
+Discovering call graph, iteration 42: 6160 methods.
+Discovering call graph, iteration 43: 6163 methods.
+Discovering call graph, iteration 44: 6163 methods.
+Discovering call graph, iteration 45: 6163 methods.
+Time spent solving: 182.336
+V = 68736, bits = 17
+I = 25729, bits = 15
+H = 11584, bits = 14
+F = 2491, bits = 12
+T = 1079, bits = 11
+N = 2159, bits = 12
+M = 7389, bits = 13
+Writing call graph...
+Time spent writing: 4.017
+Finished discovering call graph.
+Loading initial call graph...done. (6.552 seconds)
+Adding default static variables.
+Counting size of call graph...
+Methods=6118 Bytecodes=396974 Call sites=205832
+Vars=69010 Heaps=12915 Classes=1073 Fields=2475
+ V=17 I=18 H=14 F=12 T=11 N=18 M=14 VC=0
+done. (0.1 seconds)
+Could not load BDD package buddy: Can't load library: /home/joubert/professional/research/topic/7-horn-clause/validation/bddtemp/libbuddy.so
+Using variable ordering N_F_I_I2_M2_M_Z_V2xV1_T1_H2_T2_H1
+Start reordering
+Garbage collection #1: 2500009 nodes / 2499468 free / 0.127s / 0.127s total
+End reordering. Went from 541 to 541 nodes, gain = 0% (0.352 sec)
+Calculating call graph relation...done. (2.2 seconds)
+Garbage collection #2: 2500009 nodes / 2270441 free / 0.178s / 0.305s total
+Garbage collection #3: 2500009 nodes / 1998306 free / 0.249s / 0.554s total
+Garbage collection #4: 2500009 nodes / 1772969 free / 0.311s / 0.865s total
+Garbage collection #5: 2500009 nodes / 1600154 free / 0.348s / 1.213s total
+Garbage collection #6: 2500009 nodes / 1454029 free / 0.385s / 1.598s total
+Garbage collection #7: 2500009 nodes / 1316057 free / 0.439s / 2.037s total
+Time spent initializing: 13.383
+Garbage collection #8: 2500009 nodes / 1208768 free / 0.453s / 2.49s total
+Garbage collection #9: 2500009 nodes / 1182053 free / 0.445s / 2.935s total
+warning: excluding UnknownTypeNode java.lang.Class* from hT: H1(3381)
+warning: excluding UnknownTypeNode java.lang.Object* from hT: H1(3576)
+Garbage collection #10: 2500009 nodes / 1131456 free / 0.486s / 3.421s total
+Garbage collection #11: 2500009 nodes / 1067084 free / 0.509s / 3.93s total
+Dumping to path
+vP0.tuples domains { V1 H1 } = 2216 nodes
+Done printing 10194 lines.
+S.tuples domains { V1 V2 F } = 1325 nodes
+Done printing 69 lines.
+A.tuples domains { V1 V2 } = 22121 nodes
+Garbage collection #12: 2500009 nodes / 1053131 free / 0.499s / 4.429s total
+Done printing 13523 lines.
+vT.tuples domains { V1 T1 } = 31747 nodes
+Done printing 68436 lines.
+hT.tuples domains { H1 T2 } = 12268 nodes
+Done printing 11577 lines.
+aT.tuples domains { T1 T2 } = 6387 nodes
+Done printing 5620 lines.
+cha.tuples domains { T2 N M } = 65851 nodes
+Garbage collection #13: 2500009 nodes / 1052908 free / 0.505s / 4.934s total
+Garbage collection #14: 2500009 nodes / 1052655 free / 0.498s / 5.432s total
+Done printing 23791 lines.
+actual.tuples domains { V2 I Z } = 250951 nodes
+Garbage collection #15: 2500009 nodes / 1045967 free / 0.506s / 5.938s total
+Garbage collection #16: 2500009 nodes / 1046018 free / 0.485s / 6.423s total
+Done printing 45216 lines.
+formal.tuples domains { V1 Z M } = 84441 nodes
+Done printing 9859 lines.
+Mret.tuples domains { V2 M } = 19580 nodes
+Done printing 2452 lines.
+Mthr.tuples domains { V2 M } = 57467 nodes
+Garbage collection #17: 2500009 nodes / 1035136 free / 0.494s / 6.917s total
+Done printing 27060 lines.
+Iret.tuples domains { V1 I } = 72291 nodes
+Done printing 10275 lines.
+Ithr.tuples domains { V1 I } = 127798 nodes
+Garbage collection #18: 2500009 nodes / 1024602 free / 0.522s / 7.439s total
+Done printing 25729 lines.
+IE0.tuples domains { I M } = 44974 nodes
+Done printing 36403 lines.
+Garbage collection #19: 2500009 nodes / 1010976 free / 0.503s / 7.942s total
+Dump took 3050.402s
+Initializing BDD library (500000 nodes, cache size 125000, min free 0.2%)
+Could not load BDD package buddy: Can't load library: /home/joubert/professional/research/topic/7-horn-clause/validation/bddtemp/libbuddy.so
+Using BDD library JFactory 1.27
+Welcome to bddshell.
+Type a command or Datalog query, or "help" for help.Use C-d or 'exit' to exit.
+(This front-end is derived from net.sf.bddbddb.Interactive)
+
+
+joubert@ambel(186)~/professional/research/topic/7-horn-clause/validation/bddtemp$java -jar bddbddb-full.jar pa-tuples.datalog
+Initializing BDD library (500000 nodes, cache size 125000, min free 0.2%)
+Could not load BDD package buddy: Can't load library: /home/joubert/professional/research/topic/7-horn-clause/validation/bddtemp/libbuddy.so
+Using BDD library JFactory 1.20
+No machine learning library found, learning disabled.
+Opening Datalog program "pa-tuples.datalog"
+10 field domains.
+19 relations.
+10 rules.
+Splitting rules: done.
+Initializing solver: Adding missing domain "I1" to bddvarorder.
+Adding missing domain "V2" to bddvarorder.
+Adding missing domain "T2" to bddvarorder.
+Setting variable ordering to N0_F0_I1_I0_M1_M0_V1_V2_V0_T0_Z0_T2_T1_H0_H1, Start reordering
+Garbage collection #1: 1009 nodes / 83 free / 0.0090s / 0.0090s total
+End reordering. Went from 987 to 926 nodes, gain = 6% (1.21302669E9 sec)
+done.
+Resizing node table from 1009 to 499979
+done.
+Loading initial relations: Loaded tuples from file: vP0.tuples
+Domains of loaded relation:V1,H1
+Garbage collection #2: 499979 nodes / 496053 free / 0.099s / 0.108s total
+Loaded tuples from file: A.tuples
+Domains of loaded relation:V1,V2
+Loaded tuples from file: hP0.tuples
+Domains of loaded relation:(none)
+WARNING: Cannot load tuples S: java.io.IOException: in file "S.tuples", unknown domain F
+Loaded tuples from file: L.tuples
+Domains of loaded relation:(none)
+Garbage collection #3: 499979 nodes / 475961 free / 0.052s / 0.16s total
+Garbage collection #4: 499979 nodes / 466286 free / 0.035s / 0.195s total
+Garbage collection #5: 499979 nodes / 458462 free / 0.036s / 0.231s total
+Garbage collection #6: 499979 nodes / 451645 free / 0.039s / 0.27s total
+Garbage collection #7: 499979 nodes / 445776 free / 0.043s / 0.313s total
+Loaded tuples from file: vT.tuples
+Domains of loaded relation:V1,T1
+Garbage collection #8: 499979 nodes / 433575 free / 0.044s / 0.357s total
+Loaded tuples from file: hT.tuples
+Domains of loaded relation:H1,T2
+Loaded tuples from file: aT.tuples
+Domains of loaded relation:T1,T2
+Garbage collection #9: 499979 nodes / 408565 free / 0.05s / 0.407s total
+Garbage collection #10: 499979 nodes / 374483 free / 0.059s / 0.466s total
+Garbage collection #11: 499979 nodes / 351419 free / 0.064s / 0.53s total
+Garbage collection #12: 499979 nodes / 328779 free / 0.07s / 0.6s total
+Garbage collection #13: 499979 nodes / 308581 free / 0.074s / 0.674s total
+Garbage collection #14: 499979 nodes / 290584 free / 0.09s / 0.764s total
+Garbage collection #15: 499979 nodes / 275653 free / 0.095s / 0.859s total
+Garbage collection #16: 499979 nodes / 260708 free / 0.086s / 0.945s total
+Garbage collection #17: 499979 nodes / 247391 free / 0.091s / 1.036s total
+Loaded tuples from file: actual.tuples
+Domains of loaded relation:I0,Z0,V2
+Garbage collection #18: 499979 nodes / 223853 free / 0.095s / 1.131s total
+Garbage collection #19: 499979 nodes / 198859 free / 0.111s / 1.242s total
+Loaded tuples from file: formal.tuples
+Domains of loaded relation:V1,Z0,M0
+Loaded tuples from file: Mret.tuples
+Domains of loaded relation:M0,V2
+Garbage collection #20: 499979 nodes / 175118 free / 0.108s / 1.35s total
+Garbage collection #21: 499979 nodes / 166249 free / 0.113s / 1.463s total
+Garbage collection #22: 499979 nodes / 158854 free / 0.114s / 1.577s total
+Garbage collection #23: 499979 nodes / 151053 free / 0.116s / 1.693s total
+Garbage collection #24: 499979 nodes / 144782 free / 0.117s / 1.81s total
+Garbage collection #25: 499979 nodes / 138133 free / 0.119s / 1.929s total
+Garbage collection #26: 499979 nodes / 132124 free / 0.122s / 2.051s total
+Garbage collection #27: 499979 nodes / 126917 free / 0.122s / 2.173s total
+Loaded tuples from file: Mthr.tuples
+Domains of loaded relation:M0,V2
+Garbage collection #28: 499979 nodes / 107376 free / 0.127s / 2.3s total
+Garbage collection #29: 499979 nodes / 88884 free / 0.13s / 2.43s total
+Resizing node table from 499979 to 549979
+Garbage collection #30: 549979 nodes / 120448 free / 0.144s / 2.574s total
+Garbage collection #31: 549979 nodes / 107216 free / 0.141s / 2.715s total
+Resizing node table from 549979 to 599959
+Loaded tuples from file: Iret.tuples
+Domains of loaded relation:V1,I0
+Garbage collection #32: 599959 nodes / 134003 free / 0.149s / 2.864s total
+Garbage collection #33: 599959 nodes / 117707 free / 0.153s / 3.017s total
+Resizing node table from 599959 to 649937
+Garbage collection #34: 649937 nodes / 151034 free / 0.163s / 3.18s total
+Garbage collection #35: 649937 nodes / 137758 free / 0.167s / 3.347s total
+Garbage collection #36: 649937 nodes / 127764 free / 0.18s / 3.527s total
+Resizing node table from 649937 to 699931
+Garbage collection #37: 699931 nodes / 165964 free / 0.176s / 3.703s total
+Garbage collection #38: 699931 nodes / 155921 free / 0.179s / 3.882s total
+Loaded tuples from file: Ithr.tuples
+Domains of loaded relation:V1,I0
+Garbage collection #39: 699931 nodes / 146241 free / 0.183s / 4.065s total
+Resizing node table from 699931 to 749927
+Garbage collection #40: 749927 nodes / 185976 free / 0.187s / 4.252s total
+Garbage collection #41: 749927 nodes / 179702 free / 0.188s / 4.44s total
+Garbage collection #42: 749927 nodes / 174814 free / 0.191s / 4.631s total
+Garbage collection #43: 749927 nodes / 170196 free / 0.191s / 4.822s total
+Garbage collection #44: 749927 nodes / 165993 free / 0.194s / 5.016s total
+Garbage collection #45: 749927 nodes / 162170 free / 0.194s / 5.21s total
+Garbage collection #46: 749927 nodes / 158320 free / 0.196s / 5.406s total
+Garbage collection #47: 749927 nodes / 155113 free / 0.197s / 5.603s total
+Resizing node table from 749927 to 799921
+Loaded tuples from file: IE0.tuples
+Domains of loaded relation:I0,M0
+done. (17617 ms)
+Stratifying:
+done. (33 ms)
+Solving:
+Applying inference rule:
+   vP(v:V1,h:H1) :- vP0(v:V1,h:H1). (1)
+Applying inference rule:
+   IE(i:I0,m:M0) :- IE0(i:I0,m:M0). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mret(v1:V2,m:M0), IE(i:I0,m:M0), Iret(v2:V1,i:I0). (1)
+Garbage collection #48: 799921 nodes / 171073 free / 0.22s / 5.823s total
+Applying inference rule:
+   hP(h:H0,f:F0,h2:H1) :- hP0(h:H0,f:F0,h2:H1). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mthr(v1:V2,m:M0), IE(i:I0,m:M0), Ithr(v2:V1,i:I0). (1)
+Garbage collection #49: 799921 nodes / 171571 free / 0.231s / 6.054s total
+Garbage collection #50: 799921 nodes / 140326 free / 0.223s / 6.277s total
+Resizing node table from 799921 to 849917
+Garbage collection #51: 849917 nodes / 183004 free / 0.272s / 6.549s total
+Garbage collection #52: 849917 nodes / 177197 free / 0.23s / 6.779s total
+Resizing node table from 849917 to 899917
+Applying inference rule:
+   A(v1:V1,v2:V2) :- formal(v1:V1,z:Z0,m:M0), IE(i:I0,m:M0), actual(v2:V2,i:I0,z:Z0). (1)
+Garbage collection #53: 899917 nodes / 218399 free / 0.237s / 7.016s total
+Garbage collection #54: 899917 nodes / 203395 free / 0.246s / 7.262s total
+Garbage collection #55: 899917 nodes / 174262 free / 0.247s / 7.509s total
+Resizing node table from 899917 to 949903
+Garbage collection #56: 949903 nodes / 217443 free / 0.261s / 7.77s total
+Garbage collection #57: 949903 nodes / 189851 free / 0.271s / 8.041s total
+Resizing node table from 949903 to 999883
+Applying inference rule:
+   vPfilter(v:V1,h:H1) :- vT(v:V1,tv:T1), aT(tv:T1,th:T2), hT(h:H1,th:T2). (1)
+Garbage collection #58: 999883 nodes / 230199 free / 0.278s / 8.319s total
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (2)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (3)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (4)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (5)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (6)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (7)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (8)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (9)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (10)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (11)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (12)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (13)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (14)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (15)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (16)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (17)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (18)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (19)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (20)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (21)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (22)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (23)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (24)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (2)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (25)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (3)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (2)
+done. (16065 ms)
+SOLVE_TIME=16065
+MAX_NODES=999883
+FINAL_NODES=932412
+Rule hP(h:H0,f:F0,h2:H1) :- hP0(h:H0,f:F0,h2:H1).
+   Updates: 1
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule IE(i:I0,m:M0) :- IE0(i:I0,m:M0).
+   Updates: 1
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1).
+   Updates: 2
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1).
+   Updates: 3
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule vP(v:V1,h:H1) :- vP0(v:V1,h:H1).
+   Updates: 1
+   Time: 14 ms
+   Longest Iteration: 0 (0 ms)
+Rule A(v2:V1,v1:V2) :- Mret(v1:V2,m:M0), IE(i:I0,m:M0), Iret(v2:V1,i:I0).
+   Updates: 1
+   Time: 471 ms
+   Longest Iteration: 0 (0 ms)
+Rule vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0).
+   Updates: 25
+   Time: 1460 ms
+   Longest Iteration: 0 (0 ms)
+Rule A(v2:V1,v1:V2) :- Mthr(v1:V2,m:M0), IE(i:I0,m:M0), Ithr(v2:V1,i:I0).
+   Updates: 1
+   Time: 1859 ms
+   Longest Iteration: 0 (0 ms)
+Rule A(v1:V1,v2:V2) :- formal(v1:V1,z:Z0,m:M0), IE(i:I0,m:M0), actual(v2:V2,i:I0,z:Z0).
+   Updates: 1
+   Time: 2629 ms
+   Longest Iteration: 0 (0 ms)
+Rule vPfilter(v:V1,h:H1) :- vT(v:V1,tv:T1), aT(tv:T1,th:T2), hT(h:H1,th:T2).
+   Updates: 1
+   Time: 9623 ms
+   Longest Iteration: 0 (0 ms)
+Saving results: Dumping tuples for vP
+Relation vP: 8719 nodes, 20389.0 elements (V0,H0)
+vP.tuples domains { V0 H0 } = 8719 nodes, 20389.0 elements
+Garbage collection #59: 999883 nodes / 181952 free / 0.298s / 8.617s total
+Resizing node table from 999883 to 1049863
+Done writing 20389 lines.
+Dumping tuples for hP
+Relation hP: 0 nodes, 0.0 elements ((none))
+Dumping tuples for IE
+Relation IE: 44974 nodes, 36403.0 elements (I0,M0)
+IE.tuples domains { I0 M0 } = 44974 nodes, 36403.0 elements
+Garbage collection #60: 1049863 nodes / 0 free / 0.335s / 8.952s total
+Resizing node table from 1049863 to 1099859
+Garbage collection #61: 1099859 nodes / 0 free / 0.349s / 9.301s total
+Resizing node table from 1099859 to 1149859
+Garbage collection #62: 1149859 nodes / 0 free / 0.378s / 9.679s total
+Resizing node table from 1149859 to 1199857
+Garbage collection #63: 1199857 nodes / 0 free / 0.385s / 10.064s total
+Resizing node table from 1199857 to 1249849
+Garbage collection #64: 1249849 nodes / 0 free / 0.405s / 10.469s total
+Resizing node table from 1249849 to 1299841
+Garbage collection #65: 1299841 nodes / 0 free / 0.404s / 10.873s total
+Resizing node table from 1299841 to 1349827
+Garbage collection #66: 1349827 nodes / 0 free / 0.404s / 11.277s total
+Resizing node table from 1349827 to 1399819
+Garbage collection #67: 1399819 nodes / 0 free / 0.429s / 11.706s total
+Resizing node table from 1399819 to 1449817
+Garbage collection #68: 1449817 nodes / 0 free / 0.432s / 12.138s total
+Resizing node table from 1449817 to 1499779
+Garbage collection #69: 1499779 nodes / 0 free / 0.453s / 12.591s total
+Resizing node table from 1499779 to 1549741
+Done writing 36403 lines.
+done. (10323 ms)
+
+[real time: 0:45.41] [virtual time: 46.262] [real memory: 0] [virtual memory: 0]
+
+
+295 MB 

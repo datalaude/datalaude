@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if test $# -ne 1
+then
+	echo "Uso del programa: [nombre del programa] [numero de repeticiones por fichero]"
+else
+	rm -r Tiempos
+	mkdir Tiempos	
+	for (( i = 1; i <= $1; i++ ))
+	do
+		for j in *.pl
+		do
+			fichero=$(echo $j | awk -F. '{print $1}')
+			echo "Prueba $i" >> ./Tiempos/$fichero.txt
+			../datalog $j | grep -2 "loadfile" >> ./Tiempos/$fichero.txt  
+			echo "Calculada la prueba $i del fichero $j"
+		done
+	done
+fi

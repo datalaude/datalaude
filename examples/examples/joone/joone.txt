@@ -1,0 +1,306 @@
+joubert@ambel(17)~/professional/research/topic/7-horn-clause/validation/bddtemp$time java -jar bddbddb-full.jar pa-tuples.datalog
+Initializing BDD library (500000 nodes, cache size 125000, min free 0.2%)
+Could not load BDD package buddy: Can't load library: /home/joubert/professional/research/topic/7-horn-clause/validation/bddtemp/libbuddy.so
+Using BDD library JFactory 1.20
+No machine learning library found, learning disabled.
+Opening Datalog program "pa-tuples.datalog"
+10 field domains.
+19 relations.
+10 rules.
+Splitting rules: done.
+Initializing solver: Adding missing domain "I1" to bddvarorder.
+Adding missing domain "V2" to bddvarorder.
+Adding missing domain "T2" to bddvarorder.
+Setting variable ordering to N0_F0_I1_I0_M1_M0_V1_V2_V0_T0_Z0_T2_T1_H0_H1, Start reordering
+Garbage collection #1: 1009 nodes / 223 free / 0.0090s / 0.0090s total
+End reordering. Went from 839 to 786 nodes, gain = 6% (1.21303603E9 sec)
+done.
+Resizing node table from 1009 to 499979
+done.
+Loading initial relations: Loaded tuples from file: vP0.tuples
+Domains of loaded relation:V1,H1
+Loaded tuples from file: A.tuples
+Domains of loaded relation:V1,V2
+Loaded tuples from file: hP0.tuples
+Domains of loaded relation:(none)
+WARNING: Cannot load tuples S: java.io.IOException: in file "S.tuples", unknown domain F
+Loaded tuples from file: L.tuples
+Domains of loaded relation:(none)
+Garbage collection #2: 499979 nodes / 484918 free / 0.029s / 0.038s total
+Loaded tuples from file: vT.tuples
+Domains of loaded relation:V1,T1
+Loaded tuples from file: hT.tuples
+Domains of loaded relation:H1,T2
+Loaded tuples from file: aT.tuples
+Domains of loaded relation:T1,T2
+Garbage collection #3: 499979 nodes / 453819 free / 0.025s / 0.063s total
+Loaded tuples from file: actual.tuples
+Domains of loaded relation:I0,Z0,V2
+Loaded tuples from file: formal.tuples
+Domains of loaded relation:V1,Z0,M0
+Loaded tuples from file: Mret.tuples
+Domains of loaded relation:M0,V2
+Garbage collection #4: 499979 nodes / 418411 free / 0.03s / 0.093s total
+Loaded tuples from file: Mthr.tuples
+Domains of loaded relation:M0,V2
+Loaded tuples from file: Iret.tuples
+Domains of loaded relation:V1,I0
+Loaded tuples from file: Ithr.tuples
+Domains of loaded relation:V1,I0
+Garbage collection #5: 499979 nodes / 381374 free / 0.036s / 0.129s total
+Loaded tuples from file: IE0.tuples
+Domains of loaded relation:I0,M0
+done. (2349 ms)
+Stratifying:
+done. (36 ms)
+Solving:
+Applying inference rule:
+   vP(v:V1,h:H1) :- vP0(v:V1,h:H1). (1)
+Applying inference rule:
+   IE(i:I0,m:M0) :- IE0(i:I0,m:M0). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mret(v1:V2,m:M0), IE(i:I0,m:M0), Iret(v2:V1,i:I0). (1)
+Applying inference rule:
+   hP(h:H0,f:F0,h2:H1) :- hP0(h:H0,f:F0,h2:H1). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mthr(v1:V2,m:M0), IE(i:I0,m:M0), Ithr(v2:V1,i:I0). (1)
+Garbage collection #6: 499979 nodes / 359437 free / 0.048s / 0.177s total
+Applying inference rule:
+   A(v1:V1,v2:V2) :- formal(v1:V1,z:Z0,m:M0), IE(i:I0,m:M0), actual(v2:V2,i:I0,z:Z0). (1)
+Applying inference rule:
+   vPfilter(v:V1,h:H1) :- vT(v:V1,tv:T1), aT(tv:T1,th:T2), hT(h:H1,th:T2). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (2)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (3)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (4)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (5)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (6)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (7)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (8)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (9)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (10)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (11)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (12)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (13)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (14)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (2)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (15)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (3)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (2)
+done. (723 ms)
+SOLVE_TIME=723
+MAX_NODES=499979
+FINAL_NODES=467164
+Rule hP(h:H0,f:F0,h2:H1) :- hP0(h:H0,f:F0,h2:H1).
+   Updates: 1
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule IE(i:I0,m:M0) :- IE0(i:I0,m:M0).
+   Updates: 1
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1).
+   Updates: 2
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1).
+   Updates: 3
+   Time: 0 ms
+   Longest Iteration: 0 (0 ms)
+Rule vP(v:V1,h:H1) :- vP0(v:V1,h:H1).
+   Updates: 1
+   Time: 6 ms
+   Longest Iteration: 0 (0 ms)
+Rule A(v2:V1,v1:V2) :- Mret(v1:V2,m:M0), IE(i:I0,m:M0), Iret(v2:V1,i:I0).
+   Updates: 1
+   Time: 62 ms
+   Longest Iteration: 0 (0 ms)
+Rule A(v2:V1,v1:V2) :- Mthr(v1:V2,m:M0), IE(i:I0,m:M0), Ithr(v2:V1,i:I0).
+   Updates: 1
+   Time: 118 ms
+   Longest Iteration: 0 (0 ms)
+Rule A(v1:V1,v2:V2) :- formal(v1:V1,z:Z0,m:M0), IE(i:I0,m:M0), actual(v2:V2,i:I0,z:Z0).
+   Updates: 1
+   Time: 151 ms
+   Longest Iteration: 0 (0 ms)
+Rule vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0).
+   Updates: 15
+   Time: 160 ms
+   Longest Iteration: 0 (0 ms)
+Rule vPfilter(v:V1,h:H1) :- vT(v:V1,tv:T1), aT(tv:T1,th:T2), hT(h:H1,th:T2).
+   Updates: 1
+   Time: 216 ms
+   Longest Iteration: 0 (0 ms)
+Saving results: Dumping tuples for vP
+Relation vP: 3068 nodes, 4443.0 elements (V0,H0)
+vP.tuples domains { V0 H0 } = 3068 nodes, 4443.0 elements
+Garbage collection #7: 499979 nodes / 306219 free / 0.095s / 0.272s total
+Done writing 4443 lines.
+Dumping tuples for hP
+Relation hP: 0 nodes, 0.0 elements ((none))
+Dumping tuples for IE
+Relation IE: 11051 nodes, 13235.0 elements (I0,M0)
+IE.tuples domains { I0 M0 } = 11051 nodes, 13235.0 elements
+Done writing 13235 lines.
+done. (1113 ms)
+
+[real time: 0:05.09] [virtual time: 6.900] [real memory: 0] [virtual memory: 0]
+
+72MB
+
+joubert@ambel(28)~/professional/research/topic/7-horn-clause/datalog_solve/examples/joone$time ./datalog_solve -stat pa.datalog
+
+TRUE
+
+Statistical information of the underlying BES
+---------------------------------------------
+number of blocks: 3
+number of solved blocks: 3 (100%)
+total number of visited variables: 11
+total number of explored variable dependencies: 10
+total number of resolution calls: 4
+total number of redundant resolution calls: 0 (0%)
+
+block 0:
+        fixed point: minimal
+        resolution mode: 5
+        variable size: 4 bytes
+table information at address 0x8378700:
+         number of items put: 3
+         number of items got: 0
+         maximal number of items: 536870912
+         number of hash entries: 131071
+         base size in bytes: 4
+         hashable base size in bytes: 4
+         base alignment in bytes: 4
+         mark size in bytes: 8
+         mark alignment in bytes: 4
+         succ size in bytes: 4
+         padding before mark in bytes: 0
+         mark offset in bytes: 4
+         padding after mark in bytes: 0
+         item size in bytes: 16
+         page size in bytes: 262144
+         number of items per page: 16384
+         maximal number of pages: 32768
+         number of pages allocated: 1
+         total size in bytes: 917632
+         number of searches: 3
+         number of searches with failure: 3 (100%)
+         number of searches with success: 0 (0%)
+         number of collisions: 0
+         number of colliding entries: 0
+         average size of colliding entries: 0.00
+         minimal size of collision lists: 0
+         maximal size of collision lists: 1
+         comparison function: 0x804a590
+         hash function: 0x804ae80
+         printing procedure: 0x804a680
+         printing procedure for base field: (nil)
+         printing procedure for mark field: (nil)
+         overflow procedure: 0x8051d30
+
+block 1:
+        fixed point: minimal
+        resolution mode: 5
+        variable size: 4 bytes
+table information at address 0x83788f8:
+         number of items put: 5
+         number of items got: 0
+         maximal number of items: 536870912
+         number of hash entries: 131071
+         base size in bytes: 4
+         hashable base size in bytes: 4
+         base alignment in bytes: 4
+         mark size in bytes: 8
+         mark alignment in bytes: 4
+         succ size in bytes: 4
+         padding before mark in bytes: 0
+         mark offset in bytes: 4
+         padding after mark in bytes: 0
+         item size in bytes: 16
+         page size in bytes: 262144
+         number of items per page: 16384
+         maximal number of pages: 32768
+         number of pages allocated: 1
+         total size in bytes: 917632
+         number of searches: 6
+         number of searches with failure: 5 (83%)
+         number of searches with success: 1 (17%)
+         number of collisions: 0
+         number of colliding entries: 0
+         average size of colliding entries: 0.00
+         minimal size of collision lists: 0
+         maximal size of collision lists: 1
+         comparison function: 0x804a590
+         hash function: 0x804ae80
+         printing procedure: 0x804a680
+         printing procedure for base field: (nil)
+         printing procedure for mark field: (nil)
+         overflow procedure: 0x8051d30
+
+block 2:
+        fixed point: minimal
+        resolution mode: 5
+        variable size: 4 bytes
+table information at address 0x8378a20:
+         number of items put: 3
+         number of items got: 0
+         maximal number of items: 536870912
+         number of hash entries: 131071
+         base size in bytes: 4
+         hashable base size in bytes: 4
+         base alignment in bytes: 4
+         mark size in bytes: 8
+         mark alignment in bytes: 4
+         succ size in bytes: 4
+         padding before mark in bytes: 0
+         mark offset in bytes: 4
+         padding after mark in bytes: 0
+         item size in bytes: 16
+         page size in bytes: 262144
+         number of items per page: 16384
+         maximal number of pages: 32768
+         number of pages allocated: 1
+         total size in bytes: 917632
+         number of searches: 5
+         number of searches with failure: 3 (60%)
+         number of searches with success: 2 (40%)
+         number of collisions: 0
+         number of colliding entries: 0
+         average size of colliding entries: 0.00
+         minimal size of collision lists: 0
+         maximal size of collision lists: 1
+         comparison function: 0x804a590
+         hash function: 0x804ae80
+         printing procedure: 0x804a680
+         printing procedure for base field: (nil)
+         printing procedure for mark field: (nil)
+         overflow procedure: 0x8051d30
+
+
+[real time: 0:04.23] [virtual time: 4.128] [real memory: 0] [virtual memory: 0]
+
+58MB

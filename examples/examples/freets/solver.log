@@ -1,0 +1,236 @@
+Initializing solver: Adding missing domain "I1" to bddvarorder.
+Adding missing domain "V2" to bddvarorder.
+Adding missing domain "T2" to bddvarorder.
+Setting variable ordering to N0_F0_I1_I0_M1_M0_V1_V2_V0_T0_Z0_T2_T1_H0_H1, done.
+done.
+Loading initial relations: Loaded tuples from file: Iret.tuples
+Domains of loaded relation:V1,I0
+Loaded tuples from file: hT.tuples
+Domains of loaded relation:H1,T2
+Loaded tuples from file: actual.tuples
+Domains of loaded relation:I0,Z0,V2
+Loaded tuples from file: Ithr.tuples
+Domains of loaded relation:V1,I0
+Loaded tuples from file: hP0.tuples
+Domains of loaded relation:(none)
+Loaded tuples from file: vT.tuples
+Domains of loaded relation:V1,T1
+Loaded tuples from file: formal.tuples
+Domains of loaded relation:V1,Z0,M0
+Loaded tuples from file: IE0.tuples
+Domains of loaded relation:I0,M0
+Loaded tuples from file: A.tuples
+Domains of loaded relation:V1,V2
+Loaded tuples from file: Mret.tuples
+Domains of loaded relation:M0,V2
+Loaded tuples from file: aT.tuples
+Domains of loaded relation:T1,T2
+Loaded tuples from file: L.tuples
+Domains of loaded relation:(none)
+Loaded tuples from file: Mthr.tuples
+Domains of loaded relation:M0,V2
+Loaded tuples from file: S.tuples
+Domains of loaded relation:V1,F0,V2
+Loaded tuples from file: vP0.tuples
+Domains of loaded relation:V1,H1
+done. (3518 ms)
+Stratifying: 
+Discovering stratum, 0 SCCs visited so far
+Finished discovery of 43 SCCs in 1 strata
+done. (35 ms)
+Solving: 
+Applying inference rule:
+   vP(v:V1,h:H1) :- vP0(v:V1,h:H1). (1)
+Applying inference rule:
+   IE(i:I0,m:M0) :- IE0(i:I0,m:M0). (1)
+Applying inference rule:
+   hP(h:H0,f:F0,h2:H1) :- hP0(h:H0,f:F0,h2:H1). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mthr(v1:V2,m:M0), IE(i:I0,m:M0), Ithr(v2:V1,i:I0). (1)
+Applying inference rule:
+   A(v1:V1,v2:V2) :- formal(v1:V1,z:Z0,m:M0), IE(i:I0,m:M0), actual(v2:V2,i:I0,z:Z0). (1)
+Applying inference rule:
+   vPfilter(v:V1,h:H1) :- vT(v:V1,tv:T1), aT(tv:T1,th:T2), hT(h:H1,th:T2). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mret(v1:V2,m:M0), IE(i:I0,m:M0), Iret(v2:V1,i:I0). (1)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (1)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (2)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (2)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (3)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (3)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (4)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (4)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (5)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (5)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (6)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (6)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (7)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (7)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (8)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (8)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (9)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (9)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (10)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (10)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (11)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (11)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (12)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (12)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (13)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (13)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (1)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (14)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (15)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (14)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (inc) (2)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (16)
+Applying inference rule:
+   query@0(x:V0,y:H0) :- vP(x:V0,y:H0). (1)
+done. (991 ms)
+Tuples in query@0: (6463,)
+	(x=1: global(null)(0),y=1: global(null)(0))
+	(x=2:  Object: BufferedInputStream @ -1(1),y=2:  Object: BufferedInputStream @ -1(48))
+	(x=7:  Object: PrintStream @ -1(2),y=7:  Object: PrintStream @ -1(57))
+	(x=55:  Object: PrintStream @ -1(3),y=55:  Object: PrintStream @ -1(66))
+	(x=87:  Object: null @ -1(4),y=87:  Object: null @ -1(1))
+	(x=18:  Object: PrintStream @ -1(5),y=18:  Object: PrintStream @ -1(2))
+	(x=12:  Object: byte[] @ -1(6),y=12:  Object: byte[] @ -1(3))
+	(x=75:  Object: CodingErrorAction @ -1(7),y=75:  Object: CodingErrorAction @ -1(4))
+	(x=15:  Object: null @ -1(8),y=15:  Object: null @ -1(5))
+	(x=91:  Object: OutputStreamWriter @ -1(9),y=91:  Object: OutputStreamWriter @ -1(6))
+	(x=59:  Object: null @ -1(10),y=59:  Object: null @ -1(7))
+	(x=33:  Object: String @ -1(11),y=33:  Object: String @ -1(8))
+	(x=34:  Object: char[] @ -1(12),y=34:  Object: char[] @ -1(25))
+	(x=9:  Object: FileOutputStream @ -1(13),y=9:  Object: FileOutputStream @ -1(9))
+	(x=10:  Object: FileDescriptor @ -1(14),y=10:  Object: FileDescriptor @ -1(21))
+	(x=78:  Object: ReferenceQueue$Null @ -1(15),y=78:  Object: ReferenceQueue$Null @ -1(10))
+	(x=72:  Object: UTF_8 @ -1(16),y=72:  Object: UTF_8 @ -1(11))
+	(x=79:  Object: WeakReference @ -1(17),y=79:  Object: WeakReference @ -1(12))
+	(x=39:  Object: ReferenceQueue$Lock @ -1(18),y=39:  Object: ReferenceQueue$Lock @ -1(13))
+	(x=40:  Object: null @ -1(19),y=40:  Object: null @ -1(14))
+	(x=5:  Object: null @ -1(20),y=5:  Object: null @ -1(15))
+	(x=63:  Object: null @ -1(21),y=63:  Object: null @ -1(16))
+	(x=81:  Object: Surrogate$Parser @ -1(22),y=81:  Object: Surrogate$Parser @ -1(17))
+	(x=82:  Object: CoderResult @ -1(23),y=82:  Object: CoderResult @ -1(85))
+	(x=16:  Object: OutputStreamWriter @ -1(24),y=16:  Object: OutputStreamWriter @ -1(18))
+	(x=19:  Object: StreamEncoder$CharsetSE @ -1(25),y=19:  Object: StreamEncoder$CharsetSE @ -1(76))
+	(x=89:  Object: char[] @ -1(26),y=89:  Object: char[] @ -1(19))
+	(x=57:  Object: FileOutputStream @ -1(27),y=57:  Object: FileOutputStream @ -1(20))
+	(x=58:  Object: FileDescriptor @ -1(28),y=58:  Object: FileDescriptor @ -1(77))
+	(x=88:  Object: OutputStreamWriter @ -1(29),y=88:  Object: OutputStreamWriter @ -1(22))
+	(x=49:  Object: null @ -1(30),y=49:  Object: null @ -1(23))
+	(x=52:  Object: String @ -1(31),y=52:  Object: String @ -1(24))
+	(x=53:  Object: char[] @ -1(32),y=53:  Object: char[] @ -1(31))
+	(x=69:  Object: OutputStreamWriter @ -1(33),y=69:  Object: OutputStreamWriter @ -1(26))
+	(x=22:  Object: UTF_8 @ -1(34),y=22:  Object: UTF_8 @ -1(27))
+	(x=23:  Object: String @ -1(35),y=23:  Object: String @ -1(65))
+	(x=25:  Object: String[] @ -1(36),y=25:  Object: String[] @ -1(56))
+	(x=32:  Object: CodingErrorAction @ -1(37),y=32:  Object: CodingErrorAction @ -1(28))
+	(x=4:  Object: FileDescriptor @ -1(38),y=4:  Object: FileDescriptor @ -1(29))
+	(x=71:  Object: UTF_8$Encoder @ -1(39),y=71:  Object: UTF_8$Encoder @ -1(30))
+	(x=73:  Object: byte[] @ -1(40),y=73:  Object: byte[] @ -1(41))
+	(x=74:  Object: CodingErrorAction @ -1(41),y=74:  Object: CodingErrorAction @ -1(63))
+	(x=76:  Object: WeakReference @ -1(42),y=76:  Object: WeakReference @ -1(71))
+	(x=64:  Object: OutputStreamWriter @ -1(43),y=64:  Object: OutputStreamWriter @ -1(32))
+	(x=66:  Object: PrintStream @ -1(44),y=66:  Object: PrintStream @ -1(74))
+	(x=67:  Object: StreamEncoder$CharsetSE @ -1(45),y=67:  Object: StreamEncoder$CharsetSE @ -1(35))
+	(x=3:  Object: FileInputStream @ -1(46),y=3:  Object: FileInputStream @ -1(33))
+	(x=28:  Object: null @ -1(47),y=28:  Object: null @ -1(34))
+	(x=70:  Object: UTF_8 @ -1(48),y=70:  Object: UTF_8 @ -1(37))
+	(x=83:  Object: HeapByteBuffer @ -1(49),y=83:  Object: HeapByteBuffer @ -1(58))
+	(x=85:  Object: PrintStream @ -1(50),y=85:  Object: PrintStream @ -1(89))
+	(x=26:  Object: String @ -1(51),y=26:  Object: String @ -1(36))
+	(x=27:  Object: char[] @ -1(52),y=27:  Object: char[] @ -1(39))
+	(x=60:  Object: byte[] @ -1(53),y=60:  Object: byte[] @ -1(38))
+	(x=44:  Object: CoderResult @ -1(54),y=44:  Object: CoderResult @ -1(40))
+	(x=17:  Object: null @ -1(55),y=17:  Object: null @ -1(42))
+	(x=24:  Object: char[] @ -1(56),y=24:  Object: char[] @ -1(43))
+	(x=6:  Object: byte[] @ -1(57),y=6:  Object: byte[] @ -1(44))
+	(x=8:  Object: BufferedOutputStream @ -1(58),y=8:  Object: BufferedOutputStream @ -1(45))
+	(x=14:  Object: BufferedWriter @ -1(59),y=14:  Object: BufferedWriter @ -1(46))
+	(x=50:  Object: OutputStreamWriter @ -1(60),y=50:  Object: OutputStreamWriter @ -1(55))
+	(x=51:  Object: char[] @ -1(61),y=51:  Object: char[] @ -1(75))
+	(x=20:  Object: null @ -1(62),y=20:  Object: null @ -1(47))
+	(x=48:  Object: null @ -1(63),y=48:  Object: null @ -1(49))
+	(x=84:  Object: byte[] @ -1(64),y=84:  Object: byte[] @ -1(50))
+	(x=61:  Object: null @ -1(65),y=61:  Object: null @ -1(51))
+	(x=21:  Object: OutputStreamWriter @ -1(66),y=21:  Object: OutputStreamWriter @ -1(52))
+	(x=77:  Object: null @ -1(67),y=77:  Object: null @ -1(53))
+	(x=29:  Object: UTF_8$Encoder @ -1(68),y=29:  Object: UTF_8$Encoder @ -1(54))
+	(x=30:  Object: UTF_8 @ -1(69),y=30:  Object: UTF_8 @ -1(72))
+	(x=31:  Object: byte[] @ -1(70),y=31:  Object: byte[] @ -1(79))
+	(x=35:  Object: CodingErrorAction @ -1(71),y=35:  Object: CodingErrorAction @ -1(62))
+	(x=36:  Object: WeakReference @ -1(72),y=36:  Object: WeakReference @ -1(73))
+	(x=43:  Object: Surrogate$Parser @ -1(73),y=43:  Object: Surrogate$Parser @ -1(78))
+	(x=54:  Object: OutputStreamWriter @ -1(74),y=54:  Object: OutputStreamWriter @ -1(87))
+	(x=38:  Object: ReferenceQueue$Null @ -1(75),y=38:  Object: ReferenceQueue$Null @ -1(59))
+	(x=80:  Object: null @ -1(76),y=80:  Object: null @ -1(60))
+	(x=86:  Object: null @ -1(77),y=86:  Object: null @ -1(61))
+	(x=68:  Object: null @ -1(78),y=68:  Object: null @ -1(64))
+	(x=56:  Object: BufferedOutputStream @ -1(79),y=56:  Object: BufferedOutputStream @ -1(69))
+	(x=62:  Object: BufferedWriter @ -1(80),y=62:  Object: BufferedWriter @ -1(84))
+	(x=90:  Object: String @ -1(81),y=90:  Object: String @ -1(67))
+	(x=65:  Object: null @ -1(82),y=65:  Object: null @ -1(68))
+	(x=42:  Object: null @ -1(83),y=42:  Object: null @ -1(70))
+	(x=41:  Object: WeakReference @ -1(84),y=41:  Object: WeakReference @ -1(81))
+	(x=45:  Object: HeapByteBuffer @ -1(85),y=45:  Object: HeapByteBuffer @ -1(80))
+	(x=47:  Object: PrintStream @ -1(86),y=47:  Object: PrintStream @ -1(83))
+	(x=46:  Object: byte[] @ -1(87),y=46:  Object: byte[] @ -1(86))
+	(x=11:  Object: null @ -1(88),y=11:  Object: null @ -1(82))
+	(x=13:  Object: null @ -1(89),y=13:  Object: null @ -1(88))
+	(x=37:  Object: null @ -1(90),y=37:  Object: null @ -1(90))
+	(x=1511: global(com.sun.media.sound.JDK13Services.<clinit> ()V)(93),y=1: global(null)(0))
+	(x=100: global(com.sun.speech.freetts.FreeTTS.<clinit> ()V)(94),y=1: global(null)(0))
+	(x=190: global(com.sun.speech.freetts.FreeTTS.dumpAudioTypes ()V)(102),y=1: global(null)(0))
+	(x=164: global(java.lang.System.<clinit> ()V)(110),y=1: global(null)(0))
+	(x=106: FreeTTS.java:166 Return value of com.sun.speech.freetts.FreeTTS.getBasename() quad 6 => substring()*(114),y=648: Unknown: java.lang.String*(2165))
+	(x=103: global(com.sun.speech.freetts.FreeTTS.getBasename (Ljava/lang/String;)Ljava/lang/String;)(116),y=1: global(null)(0))
+	(x=97: FreeTTS.java:150 Return value of com.sun.speech.freetts.FreeTTS.getExtension() quad 7 => substring()*(120),y=648: Unknown: java.lang.String*(2165))
+	(x=93: global(com.sun.speech.freetts.FreeTTS.getExtension (Ljava/lang/String;)Ljava/lang/String;)(122),y=1: global(null)(0))
+	(x=174: global(com.sun.speech.freetts.FreeTTS.interactiveMode (Lcom/sun/speech/freetts/FreeTTS;)V)(139),y=1: global(null)(0))
+	and more (6463 in total).
+Dumping tuples for vP
+Relation vP: 3357 nodes, 6463.0 elements (V0,H0)
+vP.tuples domains { V0 H0 } = 3357 nodes, 6463.0 elements
+Done writing 6463 lines.
+Dumping tuples for hP
+Relation hP: 1281 nodes, 69.0 elements (H0,H1,F0)
+hP.tuples domains { H0 F0 H1 } = 1281 nodes, 69.0 elements
+Done writing 69 lines.
+Dumping tuples for IE
+Relation IE: 11647 nodes, 13877.0 elements (I0,M0)
+IE.tuples domains { I0 M0 } = 11647 nodes, 13877.0 elements
+Done writing 13877 lines.

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if test $# -ne 1
+then
+	echo "Uso del programa: [nombre del programa] [numero de repeticiones por fichero]"
+else
+	rm -r ./Time
+	mkdir Time
+	rm *.temp
+
+	for k in *.iris
+	do
+		fichero=$(echo $k | awk -F. '{print $1}')
+		echo "#!/bin/bash" >> ./$fichero.temp
+		cat $k >> ./$fichero.temp
+		chmod +x ./$fichero.temp
+	done
+	ls 
+	for (( i = 1; i <= $1; i++ ))
+	do
+		for j in *.temp
+		do
+			fichero=$(echo $j | awk -F. '{print $1}')
+			echo >> ./Time/$fichero.txt
+			echo >> ./Time/$fichero.txt
+			echo "Test $i">> ./Time/$fichero.txt
+			echo >> ./Time/$fichero.txt
+			./$fichero.temp | grep "Query" >> ./Time/$fichero.txt
+			echo "Calculated the test $i of the file $j"
+		done
+	done
+	rm *.temp
+fi

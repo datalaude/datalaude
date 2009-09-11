@@ -1,0 +1,55 @@
+
+### Java context-insensitive inclusion-based pointer analysis
+### Author: John Whaley
+
+
+### Domains
+
+V 32768 var.map
+H 8192 heap.map
+T 512 type.map
+F 1024 field.map
+I 65536 invoke.map
+Z 64 num.map
+M 4096 method.map
+
+### Relations
+
+vP0 (v:V1, h:H1) inputtuples
+vP (v:V0, h:H0) outputtuples
+A0 (dest:V1, source:V2) inputtuples
+A (dest:V1, source:V2) outputtuples
+hP0 (ha:H0, field:F0, hb:H1) inputtuples
+hP (ha:H0, field:F0, hb:H1) outputtuples
+S (base:V1, src:V2, field:F0) inputtuples
+L (base:V0, field:F0, dest:V1) inputtuples
+vT (var:V1, type:T1) inputtuples
+hT (heap:H1, type:T2) inputtuples
+aT (type:T1, type:T2) inputtuples
+vPfilter (v:V0, h:H0) outputtuples
+actual (actualparam:V2, invoke:I0, num:Z0) inputtuples
+formal (formalparam:V1, num:Z0, method:M0) inputtuples
+Mret (v:V2, method:M0) inputtuples
+Mthr (v:V2, method:M0) inputtuples
+Iret (v:V1, invoke:I0) inputtuples
+Ithr (v:V1, invoke:I0) inputtuples
+IE0 (invoke:I0, target:M0) inputtuples
+IE (invoke:I0, target:M0) outputtuples
+
+# Expected elements: vP 4523260
+# Expected elements: hP 1294129
+# Expected elements: IE 27453
+
+### Rules
+
+vP(v,h) :- vP0(v,h).
+A(v1,v2) :- A0(v1,v2).
+hP(h,f,h2) :- hP0(h,f,h2).
+IE(i,m) :- IE0(i,m).
+vPfilter(v,h) :- vT(v,tv), aT(tv,th), hT(h,th).
+vP(v1,h) :- A(v1,v2), vP(v2,h), vPfilter(v1,h).
+hP(h1,f,h2) :- S(v1,v2,f), vP(v1,h1), vP(v2,h2).
+vP(v2,h2) :- L(v1,f,v2), vP(v1,h1), hP(h1,f,h2), vPfilter(v2,h2).
+A(v1,v2) :- formal(v1,z,m), IE(i,m), actual(v2,i,z).
+A(v2,v1) :- Mret(v1,m), IE(i,m), Iret(v2,i).
+A(v2,v1) :- Mthr(v1,m), IE(i,m), Ithr(v2,i).

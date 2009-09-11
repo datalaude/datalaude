@@ -1,0 +1,23 @@
+1 - Put the directory 'Lua' in the same directory that the directories which contains the files with extension .tuples. For example:
+ /home/freets/
+ /home/joone/
+ /home/Lua/
+
+This way, the test files for freets and joone will be generated.
+
+2 - Run 'generadorLua', which is in the folder of Lua.
+3 - The test files will be generated in the folder "Tests" in the directory "Lua".
+
+
+----
+ - The query can be modified changing the content of the file 'query'. The rules are in the file 'rules'.
+If you want to extract the rules of the file 'pa.datalog', you must replace the following line in the script:
+
+cat rules >> ./Tests/$directorio.pl
+
+with this line:
+
+./extraerReglas < ../$directorio/pa.datalog >> ./Tests/$directorio.pl
+
+ - It is necesary to grant execution permission to 'generadorLua'.
+

@@ -1,0 +1,4 @@
+1. Put in the directory 'timeIris' the files with extension .iris.
+2. Run './timeIris' (execution permission must be granted)
+3. The results will be generated in the directory ./Time/
+

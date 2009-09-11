@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if test $# -ne 1
+then
+	echo "Usage: [program name] [number of repetitions]"
+else
+	rm -r Time
+	mkdir Time
+	rm -r UserTime
+	mkdir UserTime	
+	for (( i = 1; i <= $1; i++ ))
+	do
+		for j in *.pl
+		do
+			file=$(echo $j | awk -F. '{print $1}')
+			echo >> ./Time/$file.txt
+			echo >> ./Time/$file.txt
+			echo >> ./UserTime/$file.txt
+			echo >> ./UserTime/$file.txt
+			echo "Test $i">> ./Time/$file.txt
+			echo "Test $i">> ./UserTime/$file.txt
+			{ time ../datalog $j | grep -2 "loadfile" >> ./Time/$file.txt; } 2>> ./UserTime/$file.txt  
+			echo "Calculated the test $i of the file $j"
+		done
+	done
+fi

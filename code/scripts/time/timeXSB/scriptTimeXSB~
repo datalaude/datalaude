@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if test $# -ne 1
+then
+	echo "Usage: [program name] [number of repetitions]"
+else
+	rm -r ./Time
+	mkdir Time	
+	for (( i = 1; i <= $1; i++ ))
+	do
+		rm *.xwam
+		for j in *.pl
+		do
+			file=$(echo $j | awk -F. '{print $1}')
+			echo >> ./Time/$file.txt
+			echo >> ./Time/$file.txt
+			echo "Test $i">> ./Time/$file.txt
+			echo >> ./Time/$file.txt
+			echo "['$j']. time(run(X)). \r halt." | ../xsb | grep "seconds" >> ./Time/$file.txt
+			echo "Calculated the test $i of the file $j"
+		done
+	done
+fi

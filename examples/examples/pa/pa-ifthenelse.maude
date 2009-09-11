@@ -1,0 +1,915 @@
+mod DATALAUDE is
+
+--- Imported modules
+
+pr QID .
+pr BOOL .
+
+---{ Terms }---
+
+sorts Variable Constant Term .
+subsort Variable Constant <  Term .
+subsort Qid < Constant .		--- To ease writing code
+--- op c : Qid -> Constant [ctor] .	--- To ease writing code
+op v : Qid -> Variable [ctor] .
+op v : Term Term -> Variable [ctor] .
+op v : Term Term Term -> Variable [ctor] .
+op v : Term Term Term Term -> Variable [ctor] .
+
+---{ Constraint }---
+
+sort Constraint .
+sort PConstraint .
+
+op _=_ : Term Constant -> Constraint .
+op success : -> Constraint [ctor] .
+op _/\_ : Constraint Constraint -> Constraint [assoc comm id: success] .
+
+---{ Variables }---
+
+var X1 X2 X3 : Constraint .
+var Q Q1 Q2 Q3 : Qid .
+var C C1 C2 C3 : Constraint .
+var Cte Cte1 Cte2 Cte3 : Constant .
+var X Y Z : Variable .
+var T T1 T2 T3 : Term .
+
+---{ Constraint Reduction }---
+
+eq ((Cte = Cte) /\ C) = C . --- eq (T = T) /\ C = C .
+eq (T = Cte) /\ (T = Cte) /\ C2 = (T = Cte) /\ C2 .
+
+--- Si se puede dar el caso en el que X = Y /\ Z = W, siendo Y y W variables desinstanciadas, podriamos meter la pata diciendo que luego es incompatible cuando no lo es
+
+---{ Auxiliar }---
+
+op  isConsistent : Constraint -> Bool .
+ceq isConsistent((X = Cte1) /\ (X = Cte2) /\ C) = false if Cte1 =/= Cte2 .
+ceq isConsistent((Cte1 = Cte2) /\ C) = false if Cte1 =/= Cte2 .
+eq  isConsistent(success) = true .
+ceq  isConsistent((T = Cte) /\ C) = true if isConsistent(C) [owise] .
+
+---{ Predicates }---
+
+op vP : Term Term -> Constraint .
+op vP0 : Term Term -> Constraint .
+op a : Term Term -> Constraint .
+op s : Term Term Term -> Constraint .
+op l : Term Term Term -> Constraint .
+op hP : Term Term Term -> Constraint .
+
+---{ Translated program }---
+
+---< Rules >---
+
+--- vP(v, h) :- vP_0 (v, h).
+crl vP(T1,T2) => C if vP0(T1,T2) => C /\ isConsistent(C) .
+
+--- vP(v1 , h) :- a(v1,v2), vP(v2,h).
+crl vP(T1,T2) => (v(T1,T2) = Cte) /\ C1 /\ C2
+	if
+		a(T1,v(T1,T2)) => ((v(T1,T2) = Cte) /\ C1)
+		/\ isConsistent((v(T1,T2) = Cte) /\ C1)
+		/\ vP(Cte,T2) => C2
+		/\ isConsistent((v(T1,T2) = Cte) /\ C1 /\ C2) .
+
+--- hP(h1,f,h2) :- s(v1,f,v2),vP(v1,h1),vP(v2,h2).
+crl hP(T1,T2,T3) => (v(T1,T2,T3,'v1) = Cte1) /\ (v(T1,T2,T3,'v2) = Cte2) /\ C1 /\ C2 /\ C3
+	if
+		s(v(T1,T2,T3,'v1),T2,v(T1,T2,T3,'v2)) =>
+			((v(T1,T2,T3,'v1) = Cte1) /\ (v(T1,T2,T3,'v1) = Cte2) /\ C1)
+		/\		isConsistent((v(T1,T2,T3,'v1) = Cte1) /\ (v(T1,T2,T3,'v2) = Cte2) /\ C1)
+		/\		vP(Cte1,T1) => C2
+		/\		isConsistent((v(T1,T2,T3,'v1) = Cte1) /\ (v(T1,T2,T3,'v2) = Cte2) /\ C1 /\ C2)
+		/\		vP(Cte2,T3) => C3
+		/\		isConsistent((v(T1,T2,T3,'v1) = Cte1) /\ (v(T1,T2,T3,'v2) = Cte2) /\ C1 /\ C2 /\ C3) .
+
+--- vP (v2 , h2 )    :- l (v1 , f, v2), vP (v1 , h1), hP (h1 , f, h2).		
+crl vP(T1,T2) => (v(T1,T2,'v1) = Cte1) /\ (v(T1,T2,'f) = Cte2) /\ C1 /\ (v(T1,T2,'h1) = Cte3) /\ C2 /\ C3
+	if
+		l(v(T1,T2,'v1),v(T1,T2,'f),T1) =>
+			((v(T1,T2,'v1) = Cte1) /\ (v(T1,T2,'f) = Cte2) /\ C1)
+		/\		isConsistent((v(T1,T2,'v1) = Cte1) /\ (v(T1,T2,'f) = Cte2) /\ C1)
+		/\		vP(Cte1,v(T1,T2,'h1)) =>
+			((v(T1,T2,'h1) = Cte3) /\ C2)
+		/\		isConsistent((v(T1,T2,'v1) = Cte1) /\ (v(T1,T2,'f) = Cte2) /\ C1 /\ (v(T1,T2,'h1) = Cte3) /\ C2)
+		/\		hP(Cte3,Cte2,T2) => C3
+		/\		isConsistent((v(T1,T2,'v1) = Cte1) /\ (v(T1,T2,'f) = Cte2) /\ C1 /\ (v(T1,T2,'h1) = Cte3) /\ C2 /\ C3) .
+
+--- Auto-generated facts
+
+
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3082) then success else T2 = '3082 fi else ( T1 = '0 ) /\ T2 = '3082 fi .
+rl a(T1,T2) => if T1 == '4349 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4349 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9571 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9571 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4485) then success else T2 = '4485 fi else ( T1 = '0 ) /\ T2 = '4485 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4836) then success else T2 = '4836 fi else ( T1 = '0 ) /\ T2 = '4836 fi .
+rl a(T1,T2) => if T1 == '4541 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4541 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5702 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5702 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5799) then success else T2 = '5799 fi else ( T1 = '0 ) /\ T2 = '5799 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8213) then success else T2 = '8213 fi else ( T1 = '0 ) /\ T2 = '8213 fi .
+rl a(T1,T2) => if T1 == '1371 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1371 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6947) then success else T2 = '6947 fi else ( T1 = '0 ) /\ T2 = '6947 fi .
+rl a(T1,T2) => if T1 == '2951 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2951 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1487 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1487 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10241) then success else T2 = '10241 fi else ( T1 = '0 ) /\ T2 = '10241 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6881) then success else T2 = '6881 fi else ( T1 = '0 ) /\ T2 = '6881 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1477) then success else T2 = '1477 fi else ( T1 = '0 ) /\ T2 = '1477 fi .
+rl a(T1,T2) => if T1 == '5221 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5221 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5361 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5361 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5621 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5621 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5010) then success else T2 = '5010 fi else ( T1 = '0 ) /\ T2 = '5010 fi .
+rl a(T1,T2) => if T1 == '9133 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9133 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4056) then success else T2 = '4056 fi else ( T1 = '0 ) /\ T2 = '4056 fi .
+rl a(T1,T2) => if T1 == '1400 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1400 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7752 then if (T2 == '7743) then success else T2 = '7743 fi else ( T1 = '7752 ) /\ T2 = '7743 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1588) then success else T2 = '1588 fi else ( T1 = '0 ) /\ T2 = '1588 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2611) then success else T2 = '2611 fi else ( T1 = '0 ) /\ T2 = '2611 fi .
+rl a(T1,T2) => if T1 == '4126 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4126 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3788 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3788 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5542) then success else T2 = '5542 fi else ( T1 = '0 ) /\ T2 = '5542 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8515) then success else T2 = '8515 fi else ( T1 = '0 ) /\ T2 = '8515 fi .
+rl a(T1,T2) => if T1 == '8834 then if (T2 == '8769) then success else T2 = '8769 fi else ( T1 = '8834 ) /\ T2 = '8769 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7268) then success else T2 = '7268 fi else ( T1 = '0 ) /\ T2 = '7268 fi .
+rl a(T1,T2) => if T1 == '6890 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6890 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6932 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6932 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4312 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4312 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5850) then success else T2 = '5850 fi else ( T1 = '0 ) /\ T2 = '5850 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9148) then success else T2 = '9148 fi else ( T1 = '0 ) /\ T2 = '9148 fi .
+rl a(T1,T2) => if T1 == '5168 then if (T2 == '5159) then success else T2 = '5159 fi else ( T1 = '5168 ) /\ T2 = '5159 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9206) then success else T2 = '9206 fi else ( T1 = '0 ) /\ T2 = '9206 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1795) then success else T2 = '1795 fi else ( T1 = '0 ) /\ T2 = '1795 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6041) then success else T2 = '6041 fi else ( T1 = '0 ) /\ T2 = '6041 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5122) then success else T2 = '5122 fi else ( T1 = '0 ) /\ T2 = '5122 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4785) then success else T2 = '4785 fi else ( T1 = '0 ) /\ T2 = '4785 fi .
+rl a(T1,T2) => if T1 == '2774 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2774 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7734 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7734 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4267) then success else T2 = '4267 fi else ( T1 = '0 ) /\ T2 = '4267 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4196) then success else T2 = '4196 fi else ( T1 = '0 ) /\ T2 = '4196 fi .
+rl a(T1,T2) => if T1 == '8841 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8841 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3036 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3036 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7899) then success else T2 = '7899 fi else ( T1 = '0 ) /\ T2 = '7899 fi .
+rl a(T1,T2) => if T1 == '6336 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6336 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4483 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4483 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4053 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4053 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4443) then success else T2 = '4443 fi else ( T1 = '0 ) /\ T2 = '4443 fi .
+rl a(T1,T2) => if T1 == '7162 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7162 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6742) then success else T2 = '6742 fi else ( T1 = '0 ) /\ T2 = '6742 fi .
+rl a(T1,T2) => if T1 == '5375 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5375 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6048) then success else T2 = '6048 fi else ( T1 = '0 ) /\ T2 = '6048 fi .
+rl a(T1,T2) => if T1 == '7542 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7542 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8673) then success else T2 = '8673 fi else ( T1 = '0 ) /\ T2 = '8673 fi .
+rl a(T1,T2) => if T1 == '3022 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3022 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8411) then success else T2 = '8411 fi else ( T1 = '0 ) /\ T2 = '8411 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7758) then success else T2 = '7758 fi else ( T1 = '0 ) /\ T2 = '7758 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2629) then success else T2 = '2629 fi else ( T1 = '0 ) /\ T2 = '2629 fi .
+rl a(T1,T2) => if T1 == '9533 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9533 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5885 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5885 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6567) then success else T2 = '6567 fi else ( T1 = '0 ) /\ T2 = '6567 fi .
+rl a(T1,T2) => if T1 == '8444 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8444 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4465 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4465 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4744) then success else T2 = '4744 fi else ( T1 = '0 ) /\ T2 = '4744 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7052) then success else T2 = '7052 fi else ( T1 = '0 ) /\ T2 = '7052 fi .
+rl a(T1,T2) => if T1 == '9082 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9082 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10340) then success else T2 = '10340 fi else ( T1 = '0 ) /\ T2 = '10340 fi .
+rl a(T1,T2) => if T1 == '901 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '901 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7914 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7914 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7070) then success else T2 = '7070 fi else ( T1 = '0 ) /\ T2 = '7070 fi .
+rl a(T1,T2) => if T1 == '7712 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7712 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2853) then success else T2 = '2853 fi else ( T1 = '0 ) /\ T2 = '2853 fi .
+rl a(T1,T2) => if T1 == '4398 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4398 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3994 then if (T2 == '3986) then success else T2 = '3986 fi else ( T1 = '3994 ) /\ T2 = '3986 fi .
+rl a(T1,T2) => if T1 == '3481 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3481 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2512) then success else T2 = '2512 fi else ( T1 = '0 ) /\ T2 = '2512 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3957) then success else T2 = '3957 fi else ( T1 = '0 ) /\ T2 = '3957 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3237) then success else T2 = '3237 fi else ( T1 = '0 ) /\ T2 = '3237 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9775) then success else T2 = '9775 fi else ( T1 = '0 ) /\ T2 = '9775 fi .
+rl a(T1,T2) => if T1 == '3774 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3774 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2998 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2998 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7785 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7785 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5898) then success else T2 = '5898 fi else ( T1 = '0 ) /\ T2 = '5898 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3092) then success else T2 = '3092 fi else ( T1 = '0 ) /\ T2 = '3092 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9351) then success else T2 = '9351 fi else ( T1 = '0 ) /\ T2 = '9351 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4111) then success else T2 = '4111 fi else ( T1 = '0 ) /\ T2 = '4111 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7984) then success else T2 = '7984 fi else ( T1 = '0 ) /\ T2 = '7984 fi .
+rl a(T1,T2) => if T1 == '6782 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6782 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7530 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7530 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8441) then success else T2 = '8441 fi else ( T1 = '0 ) /\ T2 = '8441 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1640) then success else T2 = '1640 fi else ( T1 = '0 ) /\ T2 = '1640 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8891) then success else T2 = '8891 fi else ( T1 = '0 ) /\ T2 = '8891 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2204) then success else T2 = '2204 fi else ( T1 = '0 ) /\ T2 = '2204 fi .
+rl a(T1,T2) => if T1 == '6623 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6623 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1824 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1824 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8832 then if (T2 == '8767) then success else T2 = '8767 fi else ( T1 = '8832 ) /\ T2 = '8767 fi .
+rl a(T1,T2) => if T1 == '6153 then if (T2 == '6230) then success else T2 = '6230 fi else ( T1 = '6153 ) /\ T2 = '6230 fi .
+rl a(T1,T2) => if T1 == '4861 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4861 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7715 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7715 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10252) then success else T2 = '10252 fi else ( T1 = '0 ) /\ T2 = '10252 fi .
+rl a(T1,T2) => if T1 == '10082 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10082 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8006 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8006 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5036 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5036 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4378) then success else T2 = '4378 fi else ( T1 = '0 ) /\ T2 = '4378 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8516) then success else T2 = '8516 fi else ( T1 = '0 ) /\ T2 = '8516 fi .
+rl a(T1,T2) => if T1 == '8233 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8233 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8489 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8489 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6652 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6652 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4122) then success else T2 = '4122 fi else ( T1 = '0 ) /\ T2 = '4122 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2340) then success else T2 = '2340 fi else ( T1 = '0 ) /\ T2 = '2340 fi .
+rl a(T1,T2) => if T1 == '4698 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4698 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3343) then success else T2 = '3343 fi else ( T1 = '0 ) /\ T2 = '3343 fi .
+rl a(T1,T2) => if T1 == '2179 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2179 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2606 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2606 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9075) then success else T2 = '9075 fi else ( T1 = '0 ) /\ T2 = '9075 fi .
+rl a(T1,T2) => if T1 == '9234 then if (T2 == '9233) then success else T2 = '9233 fi else ( T1 = '9234 ) /\ T2 = '9233 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2782) then success else T2 = '2782 fi else ( T1 = '0 ) /\ T2 = '2782 fi .
+rl a(T1,T2) => if T1 == '1505 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1505 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2474 then if (T2 == '2472) then success else T2 = '2472 fi else ( T1 = '2474 ) /\ T2 = '2472 fi .
+rl a(T1,T2) => if T1 == '8867 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8867 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9060 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9060 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4761 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4761 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9137) then success else T2 = '9137 fi else ( T1 = '0 ) /\ T2 = '9137 fi .
+rl a(T1,T2) => if T1 == '6681 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6681 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5630) then success else T2 = '5630 fi else ( T1 = '0 ) /\ T2 = '5630 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5254) then success else T2 = '5254 fi else ( T1 = '0 ) /\ T2 = '5254 fi .
+rl a(T1,T2) => if T1 == '1489 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1489 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2582 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2582 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4282 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4282 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7549) then success else T2 = '7549 fi else ( T1 = '0 ) /\ T2 = '7549 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3795) then success else T2 = '3795 fi else ( T1 = '0 ) /\ T2 = '3795 fi .
+rl a(T1,T2) => if T1 == '8293 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8293 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2435) then success else T2 = '2435 fi else ( T1 = '0 ) /\ T2 = '2435 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8163) then success else T2 = '8163 fi else ( T1 = '0 ) /\ T2 = '8163 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8187) then success else T2 = '8187 fi else ( T1 = '0 ) /\ T2 = '8187 fi .
+rl a(T1,T2) => if T1 == '5845 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5845 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4995) then success else T2 = '4995 fi else ( T1 = '0 ) /\ T2 = '4995 fi .
+rl a(T1,T2) => if T1 == '8200 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8200 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1665 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1665 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7853 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7853 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4749) then success else T2 = '4749 fi else ( T1 = '0 ) /\ T2 = '4749 fi .
+rl a(T1,T2) => if T1 == '5823 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5823 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2467 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2467 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9026 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9026 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1825) then success else T2 = '1825 fi else ( T1 = '0 ) /\ T2 = '1825 fi .
+rl a(T1,T2) => if T1 == '3772 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3772 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5661 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5661 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8830 then if (T2 == '8802) then success else T2 = '8802 fi else ( T1 = '8830 ) /\ T2 = '8802 fi .
+rl a(T1,T2) => if T1 == '5524 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5524 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9347 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9347 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8235) then success else T2 = '8235 fi else ( T1 = '0 ) /\ T2 = '8235 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1647) then success else T2 = '1647 fi else ( T1 = '0 ) /\ T2 = '1647 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3738) then success else T2 = '3738 fi else ( T1 = '0 ) /\ T2 = '3738 fi .
+rl a(T1,T2) => if T1 == '2506 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2506 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4904 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4904 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8481 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8481 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9554) then success else T2 = '9554 fi else ( T1 = '0 ) /\ T2 = '9554 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6028) then success else T2 = '6028 fi else ( T1 = '0 ) /\ T2 = '6028 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8971) then success else T2 = '8971 fi else ( T1 = '0 ) /\ T2 = '8971 fi .
+rl a(T1,T2) => if T1 == '8879 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8879 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7697 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7697 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5875) then success else T2 = '5875 fi else ( T1 = '0 ) /\ T2 = '5875 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3674) then success else T2 = '3674 fi else ( T1 = '0 ) /\ T2 = '3674 fi .
+rl a(T1,T2) => if T1 == '6654 then if (T2 == '6646) then success else T2 = '6646 fi else ( T1 = '6654 ) /\ T2 = '6646 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8143) then success else T2 = '8143 fi else ( T1 = '0 ) /\ T2 = '8143 fi .
+rl a(T1,T2) => if T1 == '7875 then if (T2 == '7865) then success else T2 = '7865 fi else ( T1 = '7875 ) /\ T2 = '7865 fi .
+rl a(T1,T2) => if T1 == '9685 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9685 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7209 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7209 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10280) then success else T2 = '10280 fi else ( T1 = '0 ) /\ T2 = '10280 fi .
+rl a(T1,T2) => if T1 == '7527 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7527 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '108 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '108 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1808) then success else T2 = '1808 fi else ( T1 = '0 ) /\ T2 = '1808 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2849) then success else T2 = '2849 fi else ( T1 = '0 ) /\ T2 = '2849 fi .
+rl a(T1,T2) => if T1 == '5727 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5727 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1429 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1429 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5289 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5289 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2183 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2183 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7327 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7327 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4004) then success else T2 = '4004 fi else ( T1 = '0 ) /\ T2 = '4004 fi .
+rl a(T1,T2) => if T1 == '5908 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5908 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9751 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9751 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8838 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8838 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2931) then success else T2 = '2931 fi else ( T1 = '0 ) /\ T2 = '2931 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5530) then success else T2 = '5530 fi else ( T1 = '0 ) /\ T2 = '5530 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2460) then success else T2 = '2460 fi else ( T1 = '0 ) /\ T2 = '2460 fi .
+rl a(T1,T2) => if T1 == '6339 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6339 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5510 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5510 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5099) then success else T2 = '5099 fi else ( T1 = '0 ) /\ T2 = '5099 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6899) then success else T2 = '6899 fi else ( T1 = '0 ) /\ T2 = '6899 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8593) then success else T2 = '8593 fi else ( T1 = '0 ) /\ T2 = '8593 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9743) then success else T2 = '9743 fi else ( T1 = '0 ) /\ T2 = '9743 fi .
+rl a(T1,T2) => if T1 == '2949 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2949 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8184 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8184 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10096) then success else T2 = '10096 fi else ( T1 = '0 ) /\ T2 = '10096 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9217) then success else T2 = '9217 fi else ( T1 = '0 ) /\ T2 = '9217 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8829) then success else T2 = '8829 fi else ( T1 = '0 ) /\ T2 = '8829 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5521) then success else T2 = '5521 fi else ( T1 = '0 ) /\ T2 = '5521 fi .
+rl a(T1,T2) => if T1 == '4991 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4991 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5723 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5723 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9840) then success else T2 = '9840 fi else ( T1 = '0 ) /\ T2 = '9840 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7638) then success else T2 = '7638 fi else ( T1 = '0 ) /\ T2 = '7638 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7724) then success else T2 = '7724 fi else ( T1 = '0 ) /\ T2 = '7724 fi .
+rl a(T1,T2) => if T1 == '9036 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9036 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9344 then if (T2 == '9340) then success else T2 = '9340 fi else ( T1 = '9344 ) /\ T2 = '9340 fi .
+rl a(T1,T2) => if T1 == '5488 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5488 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9885 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9885 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9197) then success else T2 = '9197 fi else ( T1 = '0 ) /\ T2 = '9197 fi .
+rl a(T1,T2) => if T1 == '7694 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7694 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10236 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10236 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10261 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10261 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6627 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6627 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4513) then success else T2 = '4513 fi else ( T1 = '0 ) /\ T2 = '4513 fi .
+rl a(T1,T2) => if T1 == '7427 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7427 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6037) then success else T2 = '6037 fi else ( T1 = '0 ) /\ T2 = '6037 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3768) then success else T2 = '3768 fi else ( T1 = '0 ) /\ T2 = '3768 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3855) then success else T2 = '3855 fi else ( T1 = '0 ) /\ T2 = '3855 fi .
+rl a(T1,T2) => if T1 == '5205 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5205 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6879 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6879 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9703) then success else T2 = '9703 fi else ( T1 = '0 ) /\ T2 = '9703 fi .
+rl a(T1,T2) => if T1 == '7115 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7115 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5005) then success else T2 = '5005 fi else ( T1 = '0 ) /\ T2 = '5005 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10029) then success else T2 = '10029 fi else ( T1 = '0 ) /\ T2 = '10029 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5718) then success else T2 = '5718 fi else ( T1 = '0 ) /\ T2 = '5718 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6419) then success else T2 = '6419 fi else ( T1 = '0 ) /\ T2 = '6419 fi .
+rl a(T1,T2) => if T1 == '5735 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5735 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4478) then success else T2 = '4478 fi else ( T1 = '0 ) /\ T2 = '4478 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7701) then success else T2 = '7701 fi else ( T1 = '0 ) /\ T2 = '7701 fi .
+rl a(T1,T2) => if T1 == '4956 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4956 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3809 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3809 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7068 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7068 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2846 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2846 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2596 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2596 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2713 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2713 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7150 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7150 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8051 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8051 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1611 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1611 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3961 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3961 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3438) then success else T2 = '3438 fi else ( T1 = '0 ) /\ T2 = '3438 fi .
+rl a(T1,T2) => if T1 == '8832 then if (T2 == '8745) then success else T2 = '8745 fi else ( T1 = '8832 ) /\ T2 = '8745 fi .
+rl a(T1,T2) => if T1 == '8156 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8156 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9109) then success else T2 = '9109 fi else ( T1 = '0 ) /\ T2 = '9109 fi .
+rl a(T1,T2) => if T1 == '4552 then if (T2 == '4546) then success else T2 = '4546 fi else ( T1 = '4552 ) /\ T2 = '4546 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4539) then success else T2 = '4539 fi else ( T1 = '0 ) /\ T2 = '4539 fi .
+rl a(T1,T2) => if T1 == '4326 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4326 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3586) then success else T2 = '3586 fi else ( T1 = '0 ) /\ T2 = '3586 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3614) then success else T2 = '3614 fi else ( T1 = '0 ) /\ T2 = '3614 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9893) then success else T2 = '9893 fi else ( T1 = '0 ) /\ T2 = '9893 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5994) then success else T2 = '5994 fi else ( T1 = '0 ) /\ T2 = '5994 fi .
+rl a(T1,T2) => if T1 == '6094 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6094 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4978 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4978 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6115 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6115 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2738) then success else T2 = '2738 fi else ( T1 = '0 ) /\ T2 = '2738 fi .
+rl a(T1,T2) => if T1 == '3434 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3434 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4347) then success else T2 = '4347 fi else ( T1 = '0 ) /\ T2 = '4347 fi .
+rl a(T1,T2) => if T1 == '7375 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7375 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6533) then success else T2 = '6533 fi else ( T1 = '0 ) /\ T2 = '6533 fi .
+rl a(T1,T2) => if T1 == '5378 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5378 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10090 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10090 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3089 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3089 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6511 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6511 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5677 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5677 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3133 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3133 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1827) then success else T2 = '1827 fi else ( T1 = '0 ) /\ T2 = '1827 fi .
+rl a(T1,T2) => if T1 == '9077 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9077 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5882 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5882 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2549) then success else T2 = '2549 fi else ( T1 = '0 ) /\ T2 = '2549 fi .
+rl a(T1,T2) => if T1 == '4624 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4624 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3999 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3999 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1453 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1453 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6025) then success else T2 = '6025 fi else ( T1 = '0 ) /\ T2 = '6025 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2790) then success else T2 = '2790 fi else ( T1 = '0 ) /\ T2 = '2790 fi .
+rl a(T1,T2) => if T1 == '3849 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3849 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5598 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5598 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7699) then success else T2 = '7699 fi else ( T1 = '0 ) /\ T2 = '7699 fi .
+rl a(T1,T2) => if T1 == '9722 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9722 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8409) then success else T2 = '8409 fi else ( T1 = '0 ) /\ T2 = '8409 fi .
+rl a(T1,T2) => if T1 == '8834 then if (T2 == '8773) then success else T2 = '8773 fi else ( T1 = '8834 ) /\ T2 = '8773 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4658) then success else T2 = '4658 fi else ( T1 = '0 ) /\ T2 = '4658 fi .
+rl a(T1,T2) => if T1 == '8081 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8081 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9022) then success else T2 = '9022 fi else ( T1 = '0 ) /\ T2 = '9022 fi .
+rl a(T1,T2) => if T1 == '6555 then if (T2 == '6548) then success else T2 = '6548 fi else ( T1 = '6555 ) /\ T2 = '6548 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9055) then success else T2 = '9055 fi else ( T1 = '0 ) /\ T2 = '9055 fi .
+rl a(T1,T2) => if T1 == '1390 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1390 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6957 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6957 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5443 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5443 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6608 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6608 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6684) then success else T2 = '6684 fi else ( T1 = '0 ) /\ T2 = '6684 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4984) then success else T2 = '4984 fi else ( T1 = '0 ) /\ T2 = '4984 fi .
+rl a(T1,T2) => if T1 == '2835 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2835 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8917 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8917 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3151 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3151 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6431 then if (T2 == '6427) then success else T2 = '6427 fi else ( T1 = '6431 ) /\ T2 = '6427 fi .
+rl a(T1,T2) => if T1 == '1676 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1676 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7566 then if (T2 == '7565) then success else T2 = '7565 fi else ( T1 = '7566 ) /\ T2 = '7565 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7082) then success else T2 = '7082 fi else ( T1 = '0 ) /\ T2 = '7082 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5257) then success else T2 = '5257 fi else ( T1 = '0 ) /\ T2 = '5257 fi .
+rl a(T1,T2) => if T1 == '3984 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3984 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6545 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6545 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7029 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7029 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10009 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10009 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5653) then success else T2 = '5653 fi else ( T1 = '0 ) /\ T2 = '5653 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5827) then success else T2 = '5827 fi else ( T1 = '0 ) /\ T2 = '5827 fi .
+rl a(T1,T2) => if T1 == '8831 then if (T2 == '8791) then success else T2 = '8791 fi else ( T1 = '8831 ) /\ T2 = '8791 fi .
+rl a(T1,T2) => if T1 == '6212 then if (T2 == '6210) then success else T2 = '6210 fi else ( T1 = '6212 ) /\ T2 = '6210 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8124) then success else T2 = '8124 fi else ( T1 = '0 ) /\ T2 = '8124 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8567) then success else T2 = '8567 fi else ( T1 = '0 ) /\ T2 = '8567 fi .
+rl a(T1,T2) => if T1 == '6566 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6566 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7159) then success else T2 = '7159 fi else ( T1 = '0 ) /\ T2 = '7159 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3815) then success else T2 = '3815 fi else ( T1 = '0 ) /\ T2 = '3815 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5296) then success else T2 = '5296 fi else ( T1 = '0 ) /\ T2 = '5296 fi .
+rl a(T1,T2) => if T1 == '6589 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6589 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6033) then success else T2 = '6033 fi else ( T1 = '0 ) /\ T2 = '6033 fi .
+rl a(T1,T2) => if T1 == '2777 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2777 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9090) then success else T2 = '9090 fi else ( T1 = '0 ) /\ T2 = '9090 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5684) then success else T2 = '5684 fi else ( T1 = '0 ) /\ T2 = '5684 fi .
+rl a(T1,T2) => if T1 == '7726 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7726 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6352) then success else T2 = '6352 fi else ( T1 = '0 ) /\ T2 = '6352 fi .
+rl a(T1,T2) => if T1 == '8885 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8885 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4859) then success else T2 = '4859 fi else ( T1 = '0 ) /\ T2 = '4859 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5190) then success else T2 = '5190 fi else ( T1 = '0 ) /\ T2 = '5190 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '125) then success else T2 = '125 fi else ( T1 = '0 ) /\ T2 = '125 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6918) then success else T2 = '6918 fi else ( T1 = '0 ) /\ T2 = '6918 fi .
+rl a(T1,T2) => if T1 == '5216 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5216 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6381) then success else T2 = '6381 fi else ( T1 = '0 ) /\ T2 = '6381 fi .
+rl a(T1,T2) => if T1 == '5340 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5340 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6228) then success else T2 = '6228 fi else ( T1 = '0 ) /\ T2 = '6228 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4289) then success else T2 = '4289 fi else ( T1 = '0 ) /\ T2 = '4289 fi .
+rl a(T1,T2) => if T1 == '8240 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8240 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2544) then success else T2 = '2544 fi else ( T1 = '0 ) /\ T2 = '2544 fi .
+rl a(T1,T2) => if T1 == '6909 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6909 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2473 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2473 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6747 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6747 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9301 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9301 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3749 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3749 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7669) then success else T2 = '7669 fi else ( T1 = '0 ) /\ T2 = '7669 fi .
+rl a(T1,T2) => if T1 == '10104 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10104 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4678) then success else T2 = '4678 fi else ( T1 = '0 ) /\ T2 = '4678 fi .
+rl a(T1,T2) => if T1 == '2578 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2578 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3317 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3317 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2496) then success else T2 = '2496 fi else ( T1 = '0 ) /\ T2 = '2496 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6326) then success else T2 = '6326 fi else ( T1 = '0 ) /\ T2 = '6326 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2191) then success else T2 = '2191 fi else ( T1 = '0 ) /\ T2 = '2191 fi .
+rl a(T1,T2) => if T1 == '4617 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4617 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9583 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9583 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1486 then if (T2 == '1483) then success else T2 = '1483 fi else ( T1 = '1486 ) /\ T2 = '1483 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3699) then success else T2 = '3699 fi else ( T1 = '0 ) /\ T2 = '3699 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9444) then success else T2 = '9444 fi else ( T1 = '0 ) /\ T2 = '9444 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1649) then success else T2 = '1649 fi else ( T1 = '0 ) /\ T2 = '1649 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3229) then success else T2 = '3229 fi else ( T1 = '0 ) /\ T2 = '3229 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1393) then success else T2 = '1393 fi else ( T1 = '0 ) /\ T2 = '1393 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9043) then success else T2 = '9043 fi else ( T1 = '0 ) /\ T2 = '9043 fi .
+rl a(T1,T2) => if T1 == '3791 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3791 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5712 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5712 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7815 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7815 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5093 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5093 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4114) then success else T2 = '4114 fi else ( T1 = '0 ) /\ T2 = '4114 fi .
+rl a(T1,T2) => if T1 == '6130 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6130 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5000 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5000 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3923) then success else T2 = '3923 fi else ( T1 = '0 ) /\ T2 = '3923 fi .
+rl a(T1,T2) => if T1 == '2640 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2640 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8618 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8618 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4338) then success else T2 = '4338 fi else ( T1 = '0 ) /\ T2 = '4338 fi .
+rl a(T1,T2) => if T1 == '9294 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9294 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8931 then if (T2 == '8928) then success else T2 = '8928 fi else ( T1 = '8931 ) /\ T2 = '8928 fi .
+rl a(T1,T2) => if T1 == '5687 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5687 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8923 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8923 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8053 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8053 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5019 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5019 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2426 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2426 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6316 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6316 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10328) then success else T2 = '10328 fi else ( T1 = '0 ) /\ T2 = '10328 fi .
+rl a(T1,T2) => if T1 == '6347 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6347 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8668 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8668 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7487) then success else T2 = '7487 fi else ( T1 = '0 ) /\ T2 = '7487 fi .
+rl a(T1,T2) => if T1 == '3896 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3896 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8439 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8439 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8873 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8873 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8831 then if (T2 == '8743) then success else T2 = '8743 fi else ( T1 = '8831 ) /\ T2 = '8743 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8285) then success else T2 = '8285 fi else ( T1 = '0 ) /\ T2 = '8285 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8612) then success else T2 = '8612 fi else ( T1 = '0 ) /\ T2 = '8612 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7118) then success else T2 = '7118 fi else ( T1 = '0 ) /\ T2 = '7118 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5930) then success else T2 = '5930 fi else ( T1 = '0 ) /\ T2 = '5930 fi .
+rl a(T1,T2) => if T1 == '3080 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3080 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9164) then success else T2 = '9164 fi else ( T1 = '0 ) /\ T2 = '9164 fi .
+rl a(T1,T2) => if T1 == '9754 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9754 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4654 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4654 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2470) then success else T2 = '2470 fi else ( T1 = '0 ) /\ T2 = '2470 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3029) then success else T2 = '3029 fi else ( T1 = '0 ) /\ T2 = '3029 fi .
+rl a(T1,T2) => if T1 == '3535 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3535 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3844 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3844 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4059 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4059 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8148) then success else T2 = '8148 fi else ( T1 = '0 ) /\ T2 = '8148 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8275) then success else T2 = '8275 fi else ( T1 = '0 ) /\ T2 = '8275 fi .
+rl a(T1,T2) => if T1 == '5057 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5057 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2464 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2464 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6954 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6954 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3426 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3426 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8075 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8075 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9447) then success else T2 = '9447 fi else ( T1 = '0 ) /\ T2 = '9447 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4615) then success else T2 = '4615 fi else ( T1 = '0 ) /\ T2 = '4615 fi .
+rl a(T1,T2) => if T1 == '1256 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1256 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10245 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10245 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8556) then success else T2 = '8556 fi else ( T1 = '0 ) /\ T2 = '8556 fi .
+rl a(T1,T2) => if T1 == '6557 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6557 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2632 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2632 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4459 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4459 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8193 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8193 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9996) then success else T2 = '9996 fi else ( T1 = '0 ) /\ T2 = '9996 fi .
+rl a(T1,T2) => if T1 == '6359 then if (T2 == '6354) then success else T2 = '6354 fi else ( T1 = '6359 ) /\ T2 = '6354 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4217) then success else T2 = '4217 fi else ( T1 = '0 ) /\ T2 = '4217 fi .
+rl a(T1,T2) => if T1 == '5070 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5070 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2206) then success else T2 = '2206 fi else ( T1 = '0 ) /\ T2 = '2206 fi .
+rl a(T1,T2) => if T1 == '6714 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6714 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1782) then success else T2 = '1782 fi else ( T1 = '0 ) /\ T2 = '1782 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6079) then success else T2 = '6079 fi else ( T1 = '0 ) /\ T2 = '6079 fi .
+rl a(T1,T2) => if T1 == '2447 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2447 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4287 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4287 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4220) then success else T2 = '4220 fi else ( T1 = '0 ) /\ T2 = '4220 fi .
+rl a(T1,T2) => if T1 == '1403 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1403 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4748) then success else T2 = '4748 fi else ( T1 = '0 ) /\ T2 = '4748 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8935) then success else T2 = '8935 fi else ( T1 = '0 ) /\ T2 = '8935 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9050) then success else T2 = '9050 fi else ( T1 = '0 ) /\ T2 = '9050 fi .
+rl a(T1,T2) => if T1 == '6735 then if (T2 == '6732) then success else T2 = '6732 fi else ( T1 = '6735 ) /\ T2 = '6732 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2599) then success else T2 = '2599 fi else ( T1 = '0 ) /\ T2 = '2599 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3295) then success else T2 = '3295 fi else ( T1 = '0 ) /\ T2 = '3295 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5509) then success else T2 = '5509 fi else ( T1 = '0 ) /\ T2 = '5509 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9926) then success else T2 = '9926 fi else ( T1 = '0 ) /\ T2 = '9926 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4457) then success else T2 = '4457 fi else ( T1 = '0 ) /\ T2 = '4457 fi .
+rl a(T1,T2) => if T1 == '8268 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8268 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9037 then if (T2 == '9032) then success else T2 = '9032 fi else ( T1 = '9037 ) /\ T2 = '9032 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5267) then success else T2 = '5267 fi else ( T1 = '0 ) /\ T2 = '5267 fi .
+rl a(T1,T2) => if T1 == '1542 then if (T2 == '1539) then success else T2 = '1539 fi else ( T1 = '1542 ) /\ T2 = '1539 fi .
+rl a(T1,T2) => if T1 == '5088 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5088 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2558 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2558 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10092) then success else T2 = '10092 fi else ( T1 = '0 ) /\ T2 = '10092 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1361) then success else T2 = '1361 fi else ( T1 = '0 ) /\ T2 = '1361 fi .
+rl a(T1,T2) => if T1 == '10197 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10197 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8622) then success else T2 = '8622 fi else ( T1 = '0 ) /\ T2 = '8622 fi .
+rl a(T1,T2) => if T1 == '6003 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6003 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2626 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2626 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2330) then success else T2 = '2330 fi else ( T1 = '0 ) /\ T2 = '2330 fi .
+rl a(T1,T2) => if T1 == '9836 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9836 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2967 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2967 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '592) then success else T2 = '592 fi else ( T1 = '0 ) /\ T2 = '592 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9180) then success else T2 = '9180 fi else ( T1 = '0 ) /\ T2 = '9180 fi .
+rl a(T1,T2) => if T1 == '10074 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10074 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3812 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3812 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3953) then success else T2 = '3953 fi else ( T1 = '0 ) /\ T2 = '3953 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7561) then success else T2 = '7561 fi else ( T1 = '0 ) /\ T2 = '7561 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3335) then success else T2 = '3335 fi else ( T1 = '0 ) /\ T2 = '3335 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6575) then success else T2 = '6575 fi else ( T1 = '0 ) /\ T2 = '6575 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8947) then success else T2 = '8947 fi else ( T1 = '0 ) /\ T2 = '8947 fi .
+rl a(T1,T2) => if T1 == '4062 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4062 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5628) then success else T2 = '5628 fi else ( T1 = '0 ) /\ T2 = '5628 fi .
+rl a(T1,T2) => if T1 == '3918 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3918 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6761) then success else T2 = '6761 fi else ( T1 = '0 ) /\ T2 = '6761 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9159) then success else T2 = '9159 fi else ( T1 = '0 ) /\ T2 = '9159 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4176) then success else T2 = '4176 fi else ( T1 = '0 ) /\ T2 = '4176 fi .
+rl a(T1,T2) => if T1 == '5869 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5869 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7959 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7959 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7313) then success else T2 = '7313 fi else ( T1 = '0 ) /\ T2 = '7313 fi .
+rl a(T1,T2) => if T1 == '3046 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3046 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6812) then success else T2 = '6812 fi else ( T1 = '0 ) /\ T2 = '6812 fi .
+rl a(T1,T2) => if T1 == '9890 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9890 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2903 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2903 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5474 then if (T2 == '5473) then success else T2 = '5473 fi else ( T1 = '5474 ) /\ T2 = '5473 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6107) then success else T2 = '6107 fi else ( T1 = '0 ) /\ T2 = '6107 fi .
+rl a(T1,T2) => if T1 == '4419 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4419 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7878) then success else T2 = '7878 fi else ( T1 = '0 ) /\ T2 = '7878 fi .
+rl a(T1,T2) => if T1 == '3371 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3371 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4469 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4469 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5520 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5520 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2347) then success else T2 = '2347 fi else ( T1 = '0 ) /\ T2 = '2347 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5468) then success else T2 = '5468 fi else ( T1 = '0 ) /\ T2 = '5468 fi .
+rl a(T1,T2) => if T1 == '6201 then if (T2 == '6199) then success else T2 = '6199 fi else ( T1 = '6201 ) /\ T2 = '6199 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9210) then success else T2 = '9210 fi else ( T1 = '0 ) /\ T2 = '9210 fi .
+rl a(T1,T2) => if T1 == '5519 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5519 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6729 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6729 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3160) then success else T2 = '3160 fi else ( T1 = '0 ) /\ T2 = '3160 fi .
+rl a(T1,T2) => if T1 == '8911 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8911 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5331) then success else T2 = '5331 fi else ( T1 = '0 ) /\ T2 = '5331 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7953) then success else T2 = '7953 fi else ( T1 = '0 ) /\ T2 = '7953 fi .
+rl a(T1,T2) => if T1 == '9825 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9825 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5715) then success else T2 = '5715 fi else ( T1 = '0 ) /\ T2 = '5715 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4143) then success else T2 = '4143 fi else ( T1 = '0 ) /\ T2 = '4143 fi .
+rl a(T1,T2) => if T1 == '1434 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1434 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6301) then success else T2 = '6301 fi else ( T1 = '0 ) /\ T2 = '6301 fi .
+rl a(T1,T2) => if T1 == '1367 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1367 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7905 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7905 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9332 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9332 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8562) then success else T2 = '8562 fi else ( T1 = '0 ) /\ T2 = '8562 fi .
+rl a(T1,T2) => if T1 == '6766 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6766 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2349) then success else T2 = '2349 fi else ( T1 = '0 ) /\ T2 = '2349 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6019) then success else T2 = '6019 fi else ( T1 = '0 ) /\ T2 = '6019 fi .
+rl a(T1,T2) => if T1 == '2180 then if (T2 == '2177) then success else T2 = '2177 fi else ( T1 = '2180 ) /\ T2 = '2177 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5603) then success else T2 = '5603 fi else ( T1 = '0 ) /\ T2 = '5603 fi .
+rl a(T1,T2) => if T1 == '8832 then if (T2 == '8791) then success else T2 = '8791 fi else ( T1 = '8832 ) /\ T2 = '8791 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7754) then success else T2 = '7754 fi else ( T1 = '0 ) /\ T2 = '7754 fi .
+rl a(T1,T2) => if T1 == '5013 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5013 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3703 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3703 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7728) then success else T2 = '7728 fi else ( T1 = '0 ) /\ T2 = '7728 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9504) then success else T2 = '9504 fi else ( T1 = '0 ) /\ T2 = '9504 fi .
+rl a(T1,T2) => if T1 == '5182 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5182 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9188 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9188 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7672) then success else T2 = '7672 fi else ( T1 = '0 ) /\ T2 = '7672 fi .
+rl a(T1,T2) => if T1 == '1566 then if (T2 == '1584) then success else T2 = '1584 fi else ( T1 = '1566 ) /\ T2 = '1584 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5265) then success else T2 = '5265 fi else ( T1 = '0 ) /\ T2 = '5265 fi .
+rl a(T1,T2) => if T1 == '7636 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7636 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1265 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1265 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8211) then success else T2 = '8211 fi else ( T1 = '0 ) /\ T2 = '8211 fi .
+rl a(T1,T2) => if T1 == '1386 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1386 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '105) then success else T2 = '105 fi else ( T1 = '0 ) /\ T2 = '105 fi .
+rl a(T1,T2) => if T1 == '3739 then if (T2 == '3733) then success else T2 = '3733 fi else ( T1 = '3739 ) /\ T2 = '3733 fi .
+rl a(T1,T2) => if T1 == '4383 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4383 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3677 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3677 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5031 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5031 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4896 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4896 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8067 then if (T2 == '8056) then success else T2 = '8056 fi else ( T1 = '8067 ) /\ T2 = '8056 fi .
+rl a(T1,T2) => if T1 == '6606 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6606 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3013 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3013 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2830) then success else T2 = '2830 fi else ( T1 = '0 ) /\ T2 = '2830 fi .
+rl a(T1,T2) => if T1 == '6040 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6040 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1407) then success else T2 = '1407 fi else ( T1 = '0 ) /\ T2 = '1407 fi .
+rl a(T1,T2) => if T1 == '5107 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5107 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4430) then success else T2 = '4430 fi else ( T1 = '0 ) /\ T2 = '4430 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5433) then success else T2 = '5433 fi else ( T1 = '0 ) /\ T2 = '5433 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4738) then success else T2 = '4738 fi else ( T1 = '0 ) /\ T2 = '4738 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9220) then success else T2 = '9220 fi else ( T1 = '0 ) /\ T2 = '9220 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6581) then success else T2 = '6581 fi else ( T1 = '0 ) /\ T2 = '6581 fi .
+rl a(T1,T2) => if T1 == '8698 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8698 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8543) then success else T2 = '8543 fi else ( T1 = '0 ) /\ T2 = '8543 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1668) then success else T2 = '1668 fi else ( T1 = '0 ) /\ T2 = '1668 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3714) then success else T2 = '3714 fi else ( T1 = '0 ) /\ T2 = '3714 fi .
+rl a(T1,T2) => if T1 == '2571 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2571 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3060) then success else T2 = '3060 fi else ( T1 = '0 ) /\ T2 = '3060 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6312) then success else T2 = '6312 fi else ( T1 = '0 ) /\ T2 = '6312 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6900) then success else T2 = '6900 fi else ( T1 = '0 ) /\ T2 = '6900 fi .
+rl a(T1,T2) => if T1 == '9337 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9337 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6594) then success else T2 = '6594 fi else ( T1 = '0 ) /\ T2 = '6594 fi .
+rl a(T1,T2) => if T1 == '5634 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5634 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9644 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9644 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9335) then success else T2 = '9335 fi else ( T1 = '0 ) /\ T2 = '9335 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5471) then success else T2 = '5471 fi else ( T1 = '0 ) /\ T2 = '5471 fi .
+rl a(T1,T2) => if T1 == '8060 then if (T2 == '8071) then success else T2 = '8071 fi else ( T1 = '8060 ) /\ T2 = '8071 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6962) then success else T2 = '6962 fi else ( T1 = '0 ) /\ T2 = '6962 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4272) then success else T2 = '4272 fi else ( T1 = '0 ) /\ T2 = '4272 fi .
+rl a(T1,T2) => if T1 == '10335 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10335 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4222) then success else T2 = '4222 fi else ( T1 = '0 ) /\ T2 = '4222 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7459) then success else T2 = '7459 fi else ( T1 = '0 ) /\ T2 = '7459 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10177) then success else T2 = '10177 fi else ( T1 = '0 ) /\ T2 = '10177 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7564) then success else T2 = '7564 fi else ( T1 = '0 ) /\ T2 = '7564 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2883) then success else T2 = '2883 fi else ( T1 = '0 ) /\ T2 = '2883 fi .
+rl a(T1,T2) => if T1 == '9788 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9788 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8237 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8237 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3605 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3605 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6678 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6678 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2787) then success else T2 = '2787 fi else ( T1 = '0 ) /\ T2 = '2787 fi .
+rl a(T1,T2) => if T1 == '4156 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4156 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5435 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5435 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4713 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4713 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2865 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2865 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8850 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8850 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8267) then success else T2 = '8267 fi else ( T1 = '0 ) /\ T2 = '8267 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4734) then success else T2 = '4734 fi else ( T1 = '0 ) /\ T2 = '4734 fi .
+rl a(T1,T2) => if T1 == '2857 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2857 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9270 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9270 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8586 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8586 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7172) then success else T2 = '7172 fi else ( T1 = '0 ) /\ T2 = '7172 fi .
+rl a(T1,T2) => if T1 == '9099 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9099 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8658 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8658 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2718 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2718 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5749 then if (T2 == '5743) then success else T2 = '5743 fi else ( T1 = '5749 ) /\ T2 = '5743 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9469) then success else T2 = '9469 fi else ( T1 = '0 ) /\ T2 = '9469 fi .
+rl a(T1,T2) => if T1 == '5508 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5508 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3462) then success else T2 = '3462 fi else ( T1 = '0 ) /\ T2 = '3462 fi .
+rl a(T1,T2) => if T1 == '7384 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7384 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3401) then success else T2 = '3401 fi else ( T1 = '0 ) /\ T2 = '3401 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3895) then success else T2 = '3895 fi else ( T1 = '0 ) /\ T2 = '3895 fi .
+rl a(T1,T2) => if T1 == '8833 then if (T2 == '8771) then success else T2 = '8771 fi else ( T1 = '8833 ) /\ T2 = '8771 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2665) then success else T2 = '2665 fi else ( T1 = '0 ) /\ T2 = '2665 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2798) then success else T2 = '2798 fi else ( T1 = '0 ) /\ T2 = '2798 fi .
+rl a(T1,T2) => if T1 == '3687 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3687 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5654 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5654 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3057) then success else T2 = '3057 fi else ( T1 = '0 ) /\ T2 = '3057 fi .
+rl a(T1,T2) => if T1 == '9682 then if (T2 == '9687) then success else T2 = '9687 fi else ( T1 = '9682 ) /\ T2 = '9687 fi .
+rl a(T1,T2) => if T1 == '6244 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6244 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9047 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9047 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6859 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6859 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7916 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7916 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4463) then success else T2 = '4463 fi else ( T1 = '0 ) /\ T2 = '4463 fi .
+rl a(T1,T2) => if T1 == '7606 then if (T2 == '7608) then success else T2 = '7608 fi else ( T1 = '7606 ) /\ T2 = '7608 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9025) then success else T2 = '9025 fi else ( T1 = '0 ) /\ T2 = '9025 fi .
+rl a(T1,T2) => if T1 == '4138 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4138 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5670 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5670 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8400) then success else T2 = '8400 fi else ( T1 = '0 ) /\ T2 = '8400 fi .
+rl a(T1,T2) => if T1 == '2871 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2871 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7386) then success else T2 = '7386 fi else ( T1 = '0 ) /\ T2 = '7386 fi .
+rl a(T1,T2) => if T1 == '7918 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7918 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7812) then success else T2 = '7812 fi else ( T1 = '0 ) /\ T2 = '7812 fi .
+rl a(T1,T2) => if T1 == '8723 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8723 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3745) then success else T2 = '3745 fi else ( T1 = '0 ) /\ T2 = '3745 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6869) then success else T2 = '6869 fi else ( T1 = '0 ) /\ T2 = '6869 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8861) then success else T2 = '8861 fi else ( T1 = '0 ) /\ T2 = '8861 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5270) then success else T2 = '5270 fi else ( T1 = '0 ) /\ T2 = '5270 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7510) then success else T2 = '7510 fi else ( T1 = '0 ) /\ T2 = '7510 fi .
+rl a(T1,T2) => if T1 == '1501 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '1501 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8552) then success else T2 = '8552 fi else ( T1 = '0 ) /\ T2 = '8552 fi .
+rl a(T1,T2) => if T1 == '8565 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8565 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '1533 then if (T2 == '1531) then success else T2 = '1531 fi else ( T1 = '1533 ) /\ T2 = '1531 fi .
+rl a(T1,T2) => if T1 == '4327 then if (T2 == '4328) then success else T2 = '4328 fi else ( T1 = '4327 ) /\ T2 = '4328 fi .
+rl a(T1,T2) => if T1 == '5527 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5527 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6630) then success else T2 = '6630 fi else ( T1 = '0 ) /\ T2 = '6630 fi .
+rl a(T1,T2) => if T1 == '8300 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8300 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9626 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9626 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10061 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10061 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1671) then success else T2 = '1671 fi else ( T1 = '0 ) /\ T2 = '1671 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3071) then success else T2 = '3071 fi else ( T1 = '0 ) /\ T2 = '3071 fi .
+rl a(T1,T2) => if T1 == '9620 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9620 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3784 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3784 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5349 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5349 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7972 then if (T2 == '7970) then success else T2 = '7970 fi else ( T1 = '7972 ) /\ T2 = '7970 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3529) then success else T2 = '3529 fi else ( T1 = '0 ) /\ T2 = '3529 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2868) then success else T2 = '2868 fi else ( T1 = '0 ) /\ T2 = '2868 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3277) then success else T2 = '3277 fi else ( T1 = '0 ) /\ T2 = '3277 fi .
+rl a(T1,T2) => if T1 == '9576 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9576 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9585) then success else T2 = '9585 fi else ( T1 = '0 ) /\ T2 = '9585 fi .
+rl a(T1,T2) => if T1 == '2211 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2211 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10167 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10167 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2942) then success else T2 = '2942 fi else ( T1 = '0 ) /\ T2 = '2942 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6790) then success else T2 = '6790 fi else ( T1 = '0 ) /\ T2 = '6790 fi .
+rl a(T1,T2) => if T1 == '10080 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10080 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8128) then success else T2 = '8128 fi else ( T1 = '0 ) /\ T2 = '8128 fi .
+rl a(T1,T2) => if T1 == '2769 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2769 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7051 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7051 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9522) then success else T2 = '9522 fi else ( T1 = '0 ) /\ T2 = '9522 fi .
+rl a(T1,T2) => if T1 == '9580 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9580 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8706 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8706 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8670 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8670 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5454 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5454 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8953) then success else T2 = '8953 fi else ( T1 = '0 ) /\ T2 = '8953 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10249) then success else T2 = '10249 fi else ( T1 = '0 ) /\ T2 = '10249 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3900) then success else T2 = '3900 fi else ( T1 = '0 ) /\ T2 = '3900 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4372) then success else T2 = '4372 fi else ( T1 = '0 ) /\ T2 = '4372 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4488) then success else T2 = '4488 fi else ( T1 = '0 ) /\ T2 = '4488 fi .
+rl a(T1,T2) => if T1 == '7214 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7214 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4958) then success else T2 = '4958 fi else ( T1 = '0 ) /\ T2 = '4958 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8897) then success else T2 = '8897 fi else ( T1 = '0 ) /\ T2 = '8897 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2813) then success else T2 = '2813 fi else ( T1 = '0 ) /\ T2 = '2813 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3966) then success else T2 = '3966 fi else ( T1 = '0 ) /\ T2 = '3966 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5996) then success else T2 = '5996 fi else ( T1 = '0 ) /\ T2 = '5996 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3207) then success else T2 = '3207 fi else ( T1 = '0 ) /\ T2 = '3207 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1812) then success else T2 = '1812 fi else ( T1 = '0 ) /\ T2 = '1812 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5699) then success else T2 = '5699 fi else ( T1 = '0 ) /\ T2 = '5699 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7456) then success else T2 = '7456 fi else ( T1 = '0 ) /\ T2 = '7456 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5600) then success else T2 = '5600 fi else ( T1 = '0 ) /\ T2 = '5600 fi .
+rl a(T1,T2) => if T1 == '8287 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8287 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7841 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7841 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4332) then success else T2 = '4332 fi else ( T1 = '0 ) /\ T2 = '4332 fi .
+rl a(T1,T2) => if T1 == '7043 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7043 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9657) then success else T2 = '9657 fi else ( T1 = '0 ) /\ T2 = '9657 fi .
+rl a(T1,T2) => if T1 == '6563 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6563 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5219) then success else T2 = '5219 fi else ( T1 = '0 ) /\ T2 = '5219 fi .
+rl a(T1,T2) => if T1 == '1601 then if (T2 == '1599) then success else T2 = '1599 fi else ( T1 = '1601 ) /\ T2 = '1599 fi .
+rl a(T1,T2) => if T1 == '3726 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3726 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10232) then success else T2 = '10232 fi else ( T1 = '0 ) /\ T2 = '10232 fi .
+rl a(T1,T2) => if T1 == '6464 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6464 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5456) then success else T2 = '5456 fi else ( T1 = '0 ) /\ T2 = '5456 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8736) then success else T2 = '8736 fi else ( T1 = '0 ) /\ T2 = '8736 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8663) then success else T2 = '8663 fi else ( T1 = '0 ) /\ T2 = '8663 fi .
+rl a(T1,T2) => if T1 == '9161 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9161 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5283) then success else T2 = '5283 fi else ( T1 = '0 ) /\ T2 = '5283 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3983) then success else T2 = '3983 fi else ( T1 = '0 ) /\ T2 = '3983 fi .
+rl a(T1,T2) => if T1 == '5261 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5261 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6711 then if (T2 == '6700) then success else T2 = '6700 fi else ( T1 = '6711 ) /\ T2 = '6700 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6815) then success else T2 = '6815 fi else ( T1 = '0 ) /\ T2 = '6815 fi .
+rl a(T1,T2) => if T1 == '3035 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3035 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1388) then success else T2 = '1388 fi else ( T1 = '0 ) /\ T2 = '1388 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5656) then success else T2 = '5656 fi else ( T1 = '0 ) /\ T2 = '5656 fi .
+rl a(T1,T2) => if T1 == '3381 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3381 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2519 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2519 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2973) then success else T2 = '2973 fi else ( T1 = '0 ) /\ T2 = '2973 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7838) then success else T2 = '7838 fi else ( T1 = '0 ) /\ T2 = '7838 fi .
+rl a(T1,T2) => if T1 == '3098 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3098 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1375) then success else T2 = '1375 fi else ( T1 = '0 ) /\ T2 = '1375 fi .
+rl a(T1,T2) => if T1 == '3580 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3580 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2634) then success else T2 = '2634 fi else ( T1 = '0 ) /\ T2 = '2634 fi .
+rl a(T1,T2) => if T1 == '10169 then if (T2 == '10155) then success else T2 = '10155 fi else ( T1 = '10169 ) /\ T2 = '10155 fi .
+rl a(T1,T2) => if T1 == '7449 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7449 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10050) then success else T2 = '10050 fi else ( T1 = '0 ) /\ T2 = '10050 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6726) then success else T2 = '6726 fi else ( T1 = '0 ) /\ T2 = '6726 fi .
+rl a(T1,T2) => if T1 == '4474 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4474 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1383) then success else T2 = '1383 fi else ( T1 = '0 ) /\ T2 = '1383 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6421) then success else T2 = '6421 fi else ( T1 = '0 ) /\ T2 = '6421 fi .
+rl a(T1,T2) => if T1 == '9851 then if (T2 == '9845) then success else T2 = '9845 fi else ( T1 = '9851 ) /\ T2 = '9845 fi .
+rl a(T1,T2) => if T1 == '2166 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2166 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6207 then if (T2 == '6205) then success else T2 = '6205 fi else ( T1 = '6207 ) /\ T2 = '6205 fi .
+rl a(T1,T2) => if T1 == '6266 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6266 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2564) then success else T2 = '2564 fi else ( T1 = '0 ) /\ T2 = '2564 fi .
+rl a(T1,T2) => if T1 == '4965 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4965 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8831 then if (T2 == '8773) then success else T2 = '8773 fi else ( T1 = '8831 ) /\ T2 = '8773 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4294) then success else T2 = '4294 fi else ( T1 = '0 ) /\ T2 = '4294 fi .
+rl a(T1,T2) => if T1 == '8832 then if (T2 == '8773) then success else T2 = '8773 fi else ( T1 = '8832 ) /\ T2 = '8773 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7965) then success else T2 = '7965 fi else ( T1 = '0 ) /\ T2 = '7965 fi .
+rl a(T1,T2) => if T1 == '3178 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3178 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6248) then success else T2 = '6248 fi else ( T1 = '0 ) /\ T2 = '6248 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3169) then success else T2 = '3169 fi else ( T1 = '0 ) /\ T2 = '3169 fi .
+rl a(T1,T2) => if T1 == '8714 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8714 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '10225) then success else T2 = '10225 fi else ( T1 = '0 ) /\ T2 = '10225 fi .
+rl a(T1,T2) => if T1 == '8834 then if (T2 == '8771) then success else T2 = '8771 fi else ( T1 = '8834 ) /\ T2 = '8771 fi .
+rl a(T1,T2) => if T1 == '6631 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6631 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8513) then success else T2 = '8513 fi else ( T1 = '0 ) /\ T2 = '8513 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3411) then success else T2 = '3411 fi else ( T1 = '0 ) /\ T2 = '3411 fi .
+rl a(T1,T2) => if T1 == '5366 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5366 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9508) then success else T2 = '9508 fi else ( T1 = '0 ) /\ T2 = '9508 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1610) then success else T2 = '1610 fi else ( T1 = '0 ) /\ T2 = '1610 fi .
+rl a(T1,T2) => if T1 == '3808 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3808 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7605 then if (T2 == '7607) then success else T2 = '7607 fi else ( T1 = '7605 ) /\ T2 = '7607 fi .
+rl a(T1,T2) => if T1 == '7500 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7500 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7136) then success else T2 = '7136 fi else ( T1 = '0 ) /\ T2 = '7136 fi .
+rl a(T1,T2) => if T1 == '4671 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4671 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '3694 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3694 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7176 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7176 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '10178 then if (T2 == '10179) then success else T2 = '10179 fi else ( T1 = '10178 ) /\ T2 = '10179 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5279) then success else T2 = '5279 fi else ( T1 = '0 ) /\ T2 = '5279 fi .
+rl a(T1,T2) => if T1 == '3993 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3993 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4783) then success else T2 = '4783 fi else ( T1 = '0 ) /\ T2 = '4783 fi .
+rl a(T1,T2) => if T1 == '8507 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8507 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9093 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9093 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9681 then if (T2 == '9686) then success else T2 = '9686 fi else ( T1 = '9681 ) /\ T2 = '9686 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8583) then success else T2 = '8583 fi else ( T1 = '0 ) /\ T2 = '8583 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6613) then success else T2 = '6613 fi else ( T1 = '0 ) /\ T2 = '6613 fi .
+rl a(T1,T2) => if T1 == '5038 then if (T2 == '5034) then success else T2 = '5034 fi else ( T1 = '5038 ) /\ T2 = '5034 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8111) then success else T2 = '8111 fi else ( T1 = '0 ) /\ T2 = '8111 fi .
+rl a(T1,T2) => if T1 == '3518 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3518 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6243) then success else T2 = '6243 fi else ( T1 = '0 ) /\ T2 = '6243 fi .
+rl a(T1,T2) => if T1 == '9629 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9629 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8432 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8432 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7921 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7921 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5863) then success else T2 = '5863 fi else ( T1 = '0 ) /\ T2 = '5863 fi .
+rl a(T1,T2) => if T1 == '4535 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4535 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '2173 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2173 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4279) then success else T2 = '4279 fi else ( T1 = '0 ) /\ T2 = '4279 fi .
+rl a(T1,T2) => if T1 == '2674 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2674 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5275) then success else T2 = '5275 fi else ( T1 = '0 ) /\ T2 = '5275 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4525) then success else T2 = '4525 fi else ( T1 = '0 ) /\ T2 = '4525 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6331) then success else T2 = '6331 fi else ( T1 = '0 ) /\ T2 = '6331 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5080) then success else T2 = '5080 fi else ( T1 = '0 ) /\ T2 = '5080 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2733) then success else T2 = '2733 fi else ( T1 = '0 ) /\ T2 = '2733 fi .
+rl a(T1,T2) => if T1 == '2986 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2986 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7483) then success else T2 = '7483 fi else ( T1 = '0 ) /\ T2 = '7483 fi .
+rl a(T1,T2) => if T1 == '9495 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9495 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '1552) then success else T2 = '1552 fi else ( T1 = '0 ) /\ T2 = '1552 fi .
+rl a(T1,T2) => if T1 == '9784 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9784 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3031) then success else T2 = '3031 fi else ( T1 = '0 ) /\ T2 = '3031 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6795) then success else T2 = '6795 fi else ( T1 = '0 ) /\ T2 = '6795 fi .
+rl a(T1,T2) => if T1 == '8064 then if (T2 == '8056) then success else T2 = '8056 fi else ( T1 = '8064 ) /\ T2 = '8056 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4174) then success else T2 = '4174 fi else ( T1 = '0 ) /\ T2 = '4174 fi .
+rl a(T1,T2) => if T1 == '8495 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8495 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6056 then if (T2 == '6053) then success else T2 = '6053 fi else ( T1 = '6056 ) /\ T2 = '6053 fi .
+rl a(T1,T2) => if T1 == '4695 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4695 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '8831 then if (T2 == '8767) then success else T2 = '8767 fi else ( T1 = '8831 ) /\ T2 = '8767 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4843) then success else T2 = '4843 fi else ( T1 = '0 ) /\ T2 = '4843 fi .
+rl a(T1,T2) => if T1 == '8597 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8597 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7536) then success else T2 = '7536 fi else ( T1 = '0 ) /\ T2 = '7536 fi .
+rl a(T1,T2) => if T1 == '2679 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2679 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5534 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5534 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8174) then success else T2 = '8174 fi else ( T1 = '0 ) /\ T2 = '8174 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '9436) then success else T2 = '9436 fi else ( T1 = '0 ) /\ T2 = '9436 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7691) then success else T2 = '7691 fi else ( T1 = '0 ) /\ T2 = '7691 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5382) then success else T2 = '5382 fi else ( T1 = '0 ) /\ T2 = '5382 fi .
+rl a(T1,T2) => if T1 == '9692 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9692 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '6279) then success else T2 = '6279 fi else ( T1 = '0 ) /\ T2 = '6279 fi .
+rl a(T1,T2) => if T1 == '6770 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6770 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5913) then success else T2 = '5913 fi else ( T1 = '0 ) /\ T2 = '5913 fi .
+rl a(T1,T2) => if T1 == '10205 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '10205 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8173) then success else T2 = '8173 fi else ( T1 = '0 ) /\ T2 = '8173 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '8473) then success else T2 = '8473 fi else ( T1 = '0 ) /\ T2 = '8473 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3800) then success else T2 = '3800 fi else ( T1 = '0 ) /\ T2 = '3800 fi .
+rl a(T1,T2) => if T1 == '8146 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '8146 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7539) then success else T2 = '7539 fi else ( T1 = '0 ) /\ T2 = '7539 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2808) then success else T2 = '2808 fi else ( T1 = '0 ) /\ T2 = '2808 fi .
+rl a(T1,T2) => if T1 == '3858 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3858 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6591 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6591 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '4763 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '4763 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '5647 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '5647 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2908) then success else T2 = '2908 fi else ( T1 = '0 ) /\ T2 = '2908 fi .
+rl a(T1,T2) => if T1 == '3309 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3309 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5476) then success else T2 = '5476 fi else ( T1 = '0 ) /\ T2 = '5476 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4776) then success else T2 = '4776 fi else ( T1 = '0 ) /\ T2 = '4776 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '5665) then success else T2 = '5665 fi else ( T1 = '0 ) /\ T2 = '5665 fi .
+rl a(T1,T2) => if T1 == '2953 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '2953 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '118) then success else T2 = '118 fi else ( T1 = '0 ) /\ T2 = '118 fi .
+rl a(T1,T2) => if T1 == '3731 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '3731 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '7139 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '7139 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '7166) then success else T2 = '7166 fi else ( T1 = '0 ) /\ T2 = '7166 fi .
+rl a(T1,T2) => if T1 == '6385 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '6385 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '9156 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '9156 ) /\ T2 = '0 fi .
+rl a(T1,T2) => if T1 == '6286 then if (T2 == '6283) then success else T2 = '6283 fi else ( T1 = '6286 ) /\ T2 = '6283 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '3199) then success else T2 = '3199 fi else ( T1 = '0 ) /\ T2 = '3199 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '4706) then success else T2 = '4706 fi else ( T1 = '0 ) /\ T2 = '4706 fi .
+rl a(T1,T2) => if T1 == '0 then if (T2 == '2877) then success else T2 = '2877 fi else ( T1 = '0 ) /\ T2 = '2877 fi .
+
+
+rl vP0(T1,T2) => if T1 == '0 then if (T2 == '0) then success else T2 = '0 fi else ( T1 = '0 ) /\ T2 = '0 fi .
+								
+endm
+
+

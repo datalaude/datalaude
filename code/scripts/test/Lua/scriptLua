@@ -1,0 +1,26 @@
+#!/bin/bash
+rm -r ./Test
+mkdir ./Test
+chmod +x ./facts2lua
+for j in ../*/
+do
+	directory=$(echo $j | awk -F/ '{print $2}')
+	if [ $directory != "Lua" ]
+	then
+		if [ $directory != "XSB" ]
+		then
+			if [ $directory != "Iris" ]
+			then
+				cat rules >> ./Test/$directory.pl
+				for i in $j*.tuples
+				do
+					file=$(echo $i | awk -F/ '{print $3}' |awk -F. '{print $1}')
+					filelower=$(echo $file|perl -ne '@a=split;foreach (@a) {push @b,lcfirst};print "@b\n"')
+					./facts2lua $filelower < $i >> ./Test/$directory.pl
+				done
+				cat ./query >> ./Test/$directory.pl
+			fi
+		fi
+	fi
+done
+

@@ -1,0 +1,30 @@
+#!/bin/bash
+rm -r ./Test
+mkdir ./Test
+
+for j in ../*/
+do
+	directorio=$(echo $j | awk -F/ '{print $2}')
+	if [ $directorio != "Lua" ]
+	then
+		if [ $directorio != "XSB" ]
+		then
+            		if [ $directorio != "Iris" ]
+            		then
+                		part1="java -cp ':benchmark.php:index.php:index.php~:iris-0.58.jar:iris-app-0.58.jar:iris-parser-0.58.jar:lib:log:readme.txt' org.deri.iris.demo.Demo program='"
+				part2=$(cat rules)
+				part3=""
+				for i in $j*.tuples
+				do
+				    fichero=$(echo $i | awk -F/ '{print $3}' |awk -F. '{print $1}')
+				    fichminusculas=$(echo $fichero|perl -ne '@a=split;foreach (@a) {push @b,lcfirst};print "@b\n"')
+				    part3=$part3" "$(./facts2iris $fichminusculas < $i)
+				done
+				part4=$(cat ./query)
+				part5="' timeout=30000"
+				all=$part1$part2$part3$part4$part5
+				echo $all >> ./Test/$directorio.iris
+            		fi
+		fi
+	fi
+done

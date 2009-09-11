@@ -1,0 +1,10 @@
+V 16384 var.map
+H 4096 heap.map
+T 512 type.map
+F 1024 field.map
+I 65536 invoke.map
+Z 64
+N 65536 name.map
+M 4096 method.map
+VC 1
+HC 1

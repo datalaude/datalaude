@@ -1,0 +1,2 @@
+1. Compile the parser: ghc --make Main.hs -O -o parser
+2. Run: ./parser < pa.datalog > output.txt

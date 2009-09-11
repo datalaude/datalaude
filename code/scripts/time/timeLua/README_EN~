@@ -1,0 +1,8 @@
+1 - Replace the file interp.c in the directory datalog
+2 - Compile the program:
+	1. ./configure
+	2. make
+3 - Put the folder "timeLua" into the directory of datalog
+4 - Put into the directory 'timeLua' the test files. The test files must have a extension .pl
+5 - Run the script medirTiemposLua (execution permission must be granted)
+6 - The files will be generated into the directory ./Time/

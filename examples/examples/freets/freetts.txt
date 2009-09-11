@@ -1,0 +1,291 @@
+bddshell -v -t -c com/sun/speech/freetts/FreeTTS
+
+Classpath is .:/usr/lib/jvm/java-1.5.0-sun/jre/lib:/home/joubert/professional/research/topic/7-horn-clause/examples:/home/joubert/professional/research/topic/7-horn-clause/validation:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddbddb.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jdom.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/libreadline-java.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddshell.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jwutil-1.0.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/weka.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/joeq.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/javabdd-1.0b2.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddbddb.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jdom.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/libreadline-java.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddshell.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jwutil-1.0.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/weka.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/joeq.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/javabdd-1.0b2.jar
+
+
+Discovering call graph first...
+Adding default static variables.
+Using variable ordering N_F_I_I2_M2_M_Z_V2xV1_T1_H2_T2_H1
+Start reordering
+Garbage collection #1: 2500009 nodes / 2499408 free / 0.108s / 0.108s total
+End reordering. Went from 601 to 601 nodes, gain = 0% (0.691 sec)
+Time spent initializing: 1.776
+Discovering call graph, iteration 1: 43 methods.
+Discovering call graph, iteration 2: 100 methods.
+warning: excluding UnknownTypeNode java.lang.Object* from hT: H1(211)
+warning: excluding UnknownTypeNode java.lang.Class* from hT: H1(212)
+Discovering call graph, iteration 3: 195 methods.
+Discovering call graph, iteration 4: 313 methods.
+Discovering call graph, iteration 5: 441 methods.
+Discovering call graph, iteration 6: 586 methods.
+Garbage collection #2: 2500009 nodes / 2245718 free / 0.458s / 0.566s total
+Discovering call graph, iteration 7: 728 methods.
+Discovering call graph, iteration 8: 874 methods.
+Discovering call graph, iteration 9: 1064 methods.
+Discovering call graph, iteration 10: 1214 methods.
+Garbage collection #3: 2500009 nodes / 2068165 free / 0.267s / 0.833s total
+Discovering call graph, iteration 11: 1331 methods.
+Discovering call graph, iteration 12: 1418 methods.
+Discovering call graph, iteration 13: 1564 methods.
+Garbage collection #4: 2500009 nodes / 1925076 free / 0.287s / 1.12s total
+Discovering call graph, iteration 14: 1702 methods.
+Discovering call graph, iteration 15: 1797 methods.
+Discovering call graph, iteration 16: 1844 methods.
+Discovering call graph, iteration 17: 1877 methods.
+Discovering call graph, iteration 18: 1889 methods.
+Discovering call graph, iteration 19: 1891 methods.
+Discovering call graph, iteration 20: 1891 methods.
+Discovering call graph, iteration 21: 1891 methods.
+Time spent solving: 21.254
+V = 19305, bits = 15
+I = 6493, bits = 13
+H = 4981, bits = 13
+F = 814, bits = 10
+T = 455, bits = 9
+N = 375, bits = 9
+M = 2246, bits = 12
+Writing call graph...
+Time spent writing: 1.434
+Finished discovering call graph.
+Loading initial call graph...done. (2.029 seconds)
+Adding default static variables.
+Counting size of call graph...
+Methods=1878 Bytecodes=118246 Call sites=51944
+Vars=19274 Heaps=5215 Classes=444 Fields=784
+ V=15 I=16 H=13 F=10 T=9 N=16 M=12 VC=0
+done. (0.091 seconds)
+Could not load BDD package buddy: Can't load library: /home/joubert/professional/research/topic/7-horn-clause/validation/bddtemp/libbuddy.so
+Using variable ordering N_F_I_I2_M2_M_Z_V2xV1_T1_H2_T2_H1
+Start reordering
+Garbage collection #1: 2500009 nodes / 2499534 free / 0.11s / 0.11s total
+End reordering. Went from 475 to 475 nodes, gain = 0% (0.405 sec)
+Calculating call graph relation...done. (0.584 seconds)
+Garbage collection #2: 2500009 nodes / 2233179 free / 0.116s / 0.226s total
+Time spent initializing: 3.793
+warning: excluding UnknownTypeNode java.lang.Object* from hT: H1(1946)
+warning: excluding UnknownTypeNode java.lang.Class* from hT: H1(1949)
+Dumping to path
+vP0.tuples domains { V1 H1 } = 1453 nodes
+Done printing 4164 lines.
+S.tuples domains { V1 V2 F } = 1179 nodes
+Done printing 69 lines.
+A.tuples domains { V1 V2 } = 6858 nodes
+Done printing 3810 lines.
+vT.tuples domains { V1 T1 } = 8698 nodes
+Done printing 19234 lines.
+hT.tuples domains { H1 T2 } = 4848 nodes
+Done printing 4996 lines.
+aT.tuples domains { T1 T2 } = 2246 nodes
+Done printing 2289 lines.
+cha.tuples domains { T2 N M } = 14951 nodes
+Done printing 7448 lines.
+actual.tuples domains { V2 I Z } = 64383 nodes
+Garbage collection #3: 2500009 nodes / 2125800 free / 0.137s / 0.363s total
+Done printing 11483 lines.
+formal.tuples domains { V1 Z M } = 22835 nodes
+Done printing 2845 lines.
+Mret.tuples domains { V2 M } = 5025 nodes
+Done printing 671 lines.
+Mthr.tuples domains { V2 M } = 15826 nodes
+Done printing 6821 lines.
+Iret.tuples domains { V1 I } = 16889 nodes
+Done printing 2349 lines.
+Ithr.tuples domains { V1 I } = 31705 nodes
+Done printing 6493 lines.
+IE0.tuples domains { I M } = 11647 nodes
+Done printing 13877 lines.
+Dump took 208.521s
+Initializing BDD library (500000 nodes, cache size 125000, min free 0.2%)
+Could not load BDD package buddy: Can't load library: /home/joubert/professional/research/topic/7-horn-clause/validation/bddtemp/libbuddy.so
+Using BDD library JFactory 1.27
+Welcome to bddshell.
+Type a command or Datalog query, or "help" for help.Use C-d or 'exit' to exit.
+(This front-end is derived from net.sf.bddbddb.Interactive)
+
+
+joubert@ambel(106)~/professional/research/topic/7-horn-clause/validation$bddshell -v
+Classpath is .:/usr/lib/jvm/java-1.5.0-sun/jre/lib:/home/joubert/professional/research/topic/7-horn-clause/examples:/home/joubert/professional/research/topic/7-horn-clause/validation:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddbddb.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jdom.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/libreadline-java.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddshell.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jwutil-1.0.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/weka.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/joeq.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/javabdd-1.0b2.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddbddb.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jdom.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/libreadline-java.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/bddshell.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/jwutil-1.0.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/weka.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/joeq.jar:/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/jar/javabdd-1.0b2.jar
+
+
+Initializing BDD library (500000 nodes, cache size 125000, min free 0.2%)
+Could not load BDD package buddy: Can't load library: /home/joubert/professional/research/topic/7-horn-clause/validation/bddtemp/libbuddy.so
+Using BDD library JFactory 1.27
+Welcome to bddshell.
+Type a command or Datalog query, or "help" for help.Use C-d or 'exit' to exit.
+(This front-end is derived from net.sf.bddbddb.Interactive)
+b5b> include <pa-tuples>
+.include "/home/joubert/professional/research/topic/7-horn-clause/tool/bddshell/datalog/pa-tuples.datalog"
+b5b> vP(80,Y)?
+Start reordering
+Garbage collection #1: 1009 nodes / 200 free / 0.011s / 0.011s total
+End reordering. Went from 869 to 809 nodes, gain = 6% (0.163 sec)
+137,136,135,134,133,132,131,130,129,128,127,126,125,124,123,122,103,102,101,100,99,98,97,96,95,94,61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31,30,161,160,159,158,157,156,155,154,153,152,151,150,149,148,147,146,145,144,143,142,141,140,139,138,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,176,175,174,173,172,171,170,169,168,167,166,165,164,163,162,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,112,111,110,109,108,107,106,105,104,93,92,91,90,89,88,185,184,183,182,181,180,179,178,177,121,120,119,118,117,116,115,114,113,74,73,72,71,70,69,68,67,66,65,64,63,62,87,86,85,84,83,82,81,80,79,78,77,76,75,
+Resizing node table from 1009 to 499979
+Garbage collection #2: 499979 nodes / 455984 free / 0.052s / 0.063s total
+Garbage collection #3: 499979 nodes / 421818 free / 0.028s / 0.091s total
+Garbage collection #4: 499979 nodes / 401702 free / 0.037s / 0.128s total
+Garbage collection #5: 499979 nodes / 378647 free / 0.035s / 0.163s total
+Garbage collection #6: 499979 nodes / 369865 free / 0.038s / 0.201s total
+Garbage collection #7: 499979 nodes / 346223 free / 0.041s / 0.242s total
+list1:
+  list2:
+    vP(v:V1,h:H1) :- vP0(v:V1,h:H1).
+    IE(i:I0,m:M0) :- IE0(i:I0,m:M0).
+    hP(h:H0,f:F0,h2:H1) :- hP0(h:H0,f:F0,h2:H1).
+    A(v2:V1,v1:V2) :- Mthr(v1:V2,m:M0), IE(i:I0,m:M0), Ithr(v2:V1,i:I0).
+    A(v1:V1,v2:V2) :- formal(v1:V1,z:Z0,m:M0), IE(i:I0,m:M0), actual(v2:V2,i:I0,z:Z0).
+    vPfilter(v:V1,h:H1) :- vT(v:V1,tv:T1), aT(tv:T1,th:T2), hT(h:H1,th:T2).
+    A(v2:V1,v1:V2) :- Mret(v1:V2,m:M0), IE(i:I0,m:M0), Iret(v2:V1,i:I0).
+    loop3:
+      loop5:
+        vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1).
+        vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0).
+      hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1).
+      vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1).
+    query@0(Y:H0) :- vP(80:V0,Y:H0).
+
+Garbage collection #8: 499979 nodes / 318390 free / 0.052s / 0.294s total
+b5b> outputTuples "\s*\(Y=([a-zA-Z]+).*\)" => "(freetts, %1%)"
+pattern:\s*\(Y=([a-zA-Z]+).*\)
+b5b> outputTuples
+pattern:(.*)
+Initializing solver: Adding missing domain "I1" to bddvarorder.
+Adding missing domain "V2" to bddvarorder.
+Adding missing domain "T2" to bddvarorder.
+Setting variable ordering to N0_F0_I1_I0_M1_M0_V1_V2_V0_T0_Z0_T2_T1_H0_H1, done.
+done.
+Loading initial relations: Loaded tuples from file: Iret.tuples
+Domains of loaded relation:V1,I0
+Loaded tuples from file: hT.tuples
+Domains of loaded relation:H1,T2
+Loaded tuples from file: actual.tuples
+Domains of loaded relation:I0,Z0,V2
+Loaded tuples from file: Ithr.tuples
+Domains of loaded relation:V1,I0
+Loaded tuples from file: hP0.tuples
+Domains of loaded relation:(none)
+Loaded tuples from file: vT.tuples
+Domains of loaded relation:V1,T1
+Loaded tuples from file: formal.tuples
+Domains of loaded relation:V1,Z0,M0
+Loaded tuples from file: IE0.tuples
+Domains of loaded relation:I0,M0
+Loaded tuples from file: A.tuples
+Domains of loaded relation:V1,V2
+Loaded tuples from file: Mret.tuples
+Domains of loaded relation:M0,V2
+Loaded tuples from file: aT.tuples
+Domains of loaded relation:T1,T2
+Loaded tuples from file: L.tuples
+Domains of loaded relation:(none)
+Loaded tuples from file: Mthr.tuples
+Domains of loaded relation:M0,V2
+Loaded tuples from file: S.tuples
+Domains of loaded relation:V1,F0,V2
+Loaded tuples from file: vP0.tuples
+Domains of loaded relation:V1,H1
+done. (3288 ms)
+Stratifying:
+Discovering stratum, 0 SCCs visited so far
+Finished discovery of 43 SCCs in 1 strata
+done. (46 ms)
+Solving:
+Applying inference rule:
+   vP(v:V1,h:H1) :- vP0(v:V1,h:H1). (1)
+Applying inference rule:
+   IE(i:I0,m:M0) :- IE0(i:I0,m:M0). (1)
+Applying inference rule:
+   hP(h:H0,f:F0,h2:H1) :- hP0(h:H0,f:F0,h2:H1). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mthr(v1:V2,m:M0), IE(i:I0,m:M0), Ithr(v2:V1,i:I0). (1)
+Applying inference rule:
+   A(v1:V1,v2:V2) :- formal(v1:V1,z:Z0,m:M0), IE(i:I0,m:M0), actual(v2:V2,i:I0,z:Z0). (1)
+Applying inference rule:
+   vPfilter(v:V1,h:H1) :- vT(v:V1,tv:T1), aT(tv:T1,th:T2), hT(h:H1,th:T2). (1)
+Applying inference rule:
+   A(v2:V1,v1:V2) :- Mret(v1:V2,m:M0), IE(i:I0,m:M0), Iret(v2:V1,i:I0). (1)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (1)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (1)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (2)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (2)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (3)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (3)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (4)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (4)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (5)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (5)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (6)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (6)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (7)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (7)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (8)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (8)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (9)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (9)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (10)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (10)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (11)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (11)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (12)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (12)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (13)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (13)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (1)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (14)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (15)
+Applying inference rule:
+   vP(v1:V1,h:H0) :- A(v1:V1,v2:V2), vP(v2:V2,h:H0), vPfilter(v1:V1,h:H0). (inc) (14)
+Applying inference rule:
+   hP(h1:H0,f:F0,h2:H1) :- S(v1:V1,v2:V2,f:F0), vP(v1:V1,h1:H0), vP(v2:V2,h2:H1). (inc) (2)
+Applying inference rule:
+   vP(v2:V1,h2:H1) :- L(v1:V0,f:F0,v2:V1), vP(v1:V0,h1:H0), hP(h1:H0,f:F0,h2:H1), vPfilter(v2:V1,h2:H1). (16)
+Applying inference rule:
+   query@0(Y:H0) :- vP(80:V0,Y:H0). (1)
+done. (955 ms)
+Tuples in query@0: (1,)
+        (Y=62:  Object: BufferedWriter @ -1(84))
+Dumping tuples for vP
+Relation vP: 3357 nodes, 6463.0 elements (V0,H0)
+vP.tuples domains { V0 H0 } = 3357 nodes, 6463.0 elements
+Done writing 6463 lines.
+Dumping tuples for hP
+Relation hP: 1281 nodes, 69.0 elements (H0,H1,F0)
+hP.tuples domains { H0 F0 H1 } = 1281 nodes, 69.0 elements
+Done writing 69 lines.
+Dumping tuples for IE
+Relation IE: 11647 nodes, 13877.0 elements (I0,M0)
+IE.tuples domains { I0 M0 } = 11647 nodes, 13877.0 elements
+Done writing 13877 lines.
+b5b> outputTuples "\s*\(Y=(.*).*\)" => "(freetts, %1%)"
+pattern:\s*\(Y=(.*).*\)
+(freetts, 62:  Object: BufferedWriter @ -1(84))
+

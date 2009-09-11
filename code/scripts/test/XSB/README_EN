@@ -1,0 +1,22 @@
+1 - Put the directory 'XSB' in the same directory that the directories which contains the files with extension .tuples. For example:
+ /home/freets/
+ /home/joone/
+ /home/XSB/
+
+This way, the test files for freets and joone will be generated.
+
+2 - Run 'scriptXSB', which is in the folder of XSB.
+3 - The test files will be generated in the folder "Test" in the directory "XSB".
+
+
+----
+ - The query can be modified changing the content of the file 'query'. The rules are in the file 'rules'.
+If you want to extract the rules of the file 'pa.datalog', you must replace the following line in the script:
+
+cat rules >> ./Test/$directorio.pl
+
+with this line:
+
+./extractRules < ../$directorio/pa.datalog >> ./Test/$directorio.pl
+
+ - It is necesary to grant execution permission to 'scriptXSB'.

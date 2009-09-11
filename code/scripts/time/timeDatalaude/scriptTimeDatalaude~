@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if test $# -ne 1
+then
+	echo "Usage: [program name] [number of repetitions]"
+else
+	rm -r Time	
+	mkdir Time	
+	for (( i = 1; i <= $1; i++ ))
+	do
+		for j in ./Files/*
+		do
+			file=$(echo $j | awk -F/ '{print $3}')
+			maude.linux $j/kk | grep "rewrites" >> ./Time/$file.txt;
+			echo "Calculated the test $i of the file $file"
+		done
+	done
+fi

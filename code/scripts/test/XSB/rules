@@ -1,0 +1,6 @@
+vP(V,H):-vP0(V, H).
+vP(V1,H):-a(V1,V2),vP(V2,H).
+vP(V2,H2):-l(V1,F,V2),vP(V1,H1),hP(H1,F,H2).
+hP(H1,F,H2):-s(V1,F,V2),vP(V1,H1),vP(V2,H2).
+
+l(_,_,_):-fail.

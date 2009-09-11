@@ -1,0 +1,21 @@
+1 - Coloca el directorio "Lua" junto a los directorios que contienen los ficheros .tuples y de los cuales se quiere generar las pruebas. Por ejemplo:
+ /home/freets/
+ /home/joone/
+ /home/Lua/
+
+De esta forma se generarán las pruebas para freets y para joone.
+
+2 - Ejecutar "./scriptLua", que se encuentra en la carpeta de Lua.
+3 - Las pruebas se generarán en el directorio "Test" dentro del directorio "Lua".
+
+Notas:
+
+1. La query se puede cambiar modificando el fichero "query". Las reglas son las que están en el fichero "rules". Si se desea extraer las reglas del fichero "pa.datalog" es necesario cambiar las siguientes lineas del script:
+
+cat rules >> ./Test/$directorio.pl
+
+por
+
+./extractRules < ../$directorio/pa.datalog >> ./Test/$directorio.pl
+
+2. Es posible que sea necesario darle permisos de ejecución al fichero scriptLua

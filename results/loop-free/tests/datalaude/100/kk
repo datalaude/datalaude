@@ -1,0 +1,25 @@
+load pa.maude .
+
+--- OPTIONS
+--- set trace on .
+--- trace select on .
+--- trace select problem .
+--- show module DATALAUDE .
+--- set profile on .
+set profile off .
+set trace off .
+set break off .
+
+--- IMPLICIT MODULE IMPORTATION
+--- set protect CONSTRAINT on .
+
+--- QUERY
+--- rewrite vP(X,Y) .
+reduce vP(X,Y) .
+--- reduce length vP(X,Y) .
+--- rewrite vP(X,Y) .
+
+--- RESULTS
+show profile .
+
+quit .

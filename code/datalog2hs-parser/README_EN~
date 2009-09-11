@@ -1,0 +1,2 @@
+1. Compilar el parser con el siguiente comando: ghc --make Main.hs -O -o parser
+2. Para parsear: ./parser < [ruta fichero pa.datalog] > output.txt

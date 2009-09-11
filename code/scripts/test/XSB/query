@@ -1,0 +1,12 @@
+
+
+  :- table vP/2.
+
+  :- import length/2 from basics.
+
+printResults(L) :- open(file('xsb.output'),write,Stream), printList(L,Stream).
+
+printList([],Stream) :- close(Stream).
+printList([(X,Y)|L],Stream) :- fmt_write(Stream,"%d\t%d\n",args(X,Y)), printList(L,Stream).
+
+run(Length) :- findall((X,Y),vP(X,Y),L), length(L,Length),printResults(L).

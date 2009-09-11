@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if test $# -ne 1
+then
+	echo "Usage: [program name] [number of repetitions]"
+else
+	rm -r ./Time
+	mkdir Time
+	rm *.temp
+	rm -r ./UserTime
+	mkdir UserTime	
+
+	for k in *.iris
+	do
+		file=$(echo $k | awk -F. '{print $1}')
+		echo "#!/bin/bash" >> ./$file.temp
+		cat $k >> ./$file.temp
+		chmod +x ./$file.temp
+	done
+	for (( i = 1; i <= $1; i++ ))
+	do
+		for j in *.temp
+		do
+			file=$(echo $j | awk -F. '{print $1}')
+			echo >> ./Time/$file.txt
+			echo >> ./Time/$file.txt
+			echo >> ./UserTime/$file.txt
+			echo >> ./UserTime/$file.txt
+			echo "Test $i">> ./Time/$file.txt
+			echo "Test $i">> ./UserTime/$file.txt
+			echo >> ./Time/$file.txt
+			echo >> ./UserTime/$file.txt
+			{ time ./$file.temp | grep "Query" >> ./Time/$file.txt; } 2>> ./UserTime/$file.txt
+			echo "Calculated the test $i of the file $j"
+		done
+	done
+	rm *.temp
+fi

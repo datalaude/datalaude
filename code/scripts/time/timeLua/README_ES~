@@ -1,0 +1,8 @@
+1 - Sustituir el fichero interp.c en el directorio de datalog de lua
+2 - Compilar el programa:
+	1. ./configure
+	2. make
+3 - Poner el directorio "timeLua" dentro del directorio de datalog de lua
+4 - Poner en la carpeta "timeLua" todos los ficheros de prueba de los cuales se quiere medir los tiempos. Todos los ficheros han de tener una extensión .pl
+5 - Ejecutar el script medirTiemposLua
+6 - Los ficheros se generarán dentro de la carpeta ./Time/
